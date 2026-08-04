@@ -284,9 +284,3 @@ python -m foundry_poc.cli status
 # the narrow scale-contrast:
 python -m foundry_poc.cli --config config-narrow.yaml run
 ```
-
-## What to read next
-
-Next in the guided path: **[BUILD-YOUR-OWN.md](BUILD-YOUR-OWN.md)** - now that you
-have seen the numbers, take these learnings to your own repo by building your own
-implementation from the spec.

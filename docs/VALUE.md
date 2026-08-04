@@ -150,6 +150,14 @@ everywhere - and prevention shrinks the population the next evaluation has to fi
 (Concretely: the `codeguard-*` rules governing this very workspace are that same
 format deployed as authoring-time guardrails in CodeGuard.)
 
+The concrete mechanism that closes this loop is `foundry synthesize`: it reads
+the rule-gaps log, calls the LLM to generate production-ready
+[Project CodeGuard](https://project-codeguard.org/) markdown rules, and writes them
+to the target project's `.cursor/rules/` directory where AI coding assistants pick
+them up automatically. See [CODEGUARD.md](CODEGUARD.md) for the full integration
+story and how it connects Antares, Foundry, and CodeGuard into a single security
+loop.
+
 ## Does this exercise align with the Foundry spec?
 
 The [Foundry spec](https://github.com/CiscoDevNet/foundry-security-spec) is a design,
@@ -207,9 +215,3 @@ merging or omitting roles on a first build; we named these in
 The point is the **governance and repeatability gap**, measured with the metrics
 defined before in [METHODOLOGY.md](METHODOLOGY.md) and reported with honesty in
 [RESULTS.md](RESULTS.md).
-
-## What to read next
-
-Next in the guided path: **[METHODOLOGY.md](METHODOLOGY.md)** - the design of the
-controlled experiment, the fair baseline, and the metrics defined *before* the run so
-the comparison can not be gamed.

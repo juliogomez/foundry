@@ -174,8 +174,3 @@ The Python inside `foundry_poc/` is the mechanism of the harness. All the goal o
 the design is that the **policy** (scope, goals, model, budget, severity, rules)
 lives in config and data, so to customize an evaluation you never need to edit the
 engine.
-
-## What to read next
-
-Next in the guided path: **[WALKTHROUGH.md](WALKTHROUGH.md)** - run the pipeline you
-just learned to configure, end to end against Langflow.

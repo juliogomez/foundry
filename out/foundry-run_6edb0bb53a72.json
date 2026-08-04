@@ -1,0 +1,44 @@
+{
+  "run_id": "run_6edb0bb53a72",
+  "meta": {
+    "target": "langflow",
+    "pinned_ref": "1.7.3",
+    "model": "claude-sonnet-4-6",
+    "backend": "cursor",
+    "units_analyzed": 289,
+    "candidates": 1,
+    "total_tokens": 149294,
+    "max_tokens": 6000000,
+    "stop_reason": "coverage-complete (all 289 units); trailing true-positive yield=0.00"
+  },
+  "budget": {
+    "calls": 13,
+    "input_tokens": 149151,
+    "output_tokens": 143,
+    "total_tokens": 149294,
+    "max_tokens": 6000000,
+    "exhausted": false
+  },
+  "raw_candidate_count": 1,
+  "reported_findings": [
+    {
+      "file": "src/backend/base/langflow/api/v1/voice_mode.py",
+      "line": 44,
+      "class": "CWE-94",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_3312d6f7659915ca",
+      "symbol": "FunctionCall._send_function_call._call",
+      "title": "Mock finding",
+      "evidence": [
+        {
+          "file": "x",
+          "line": 0,
+          "quote": "",
+          "resolved": false,
+          "reason": "file not found in target: x"
+        }
+      ]
+    }
+  ]
+}

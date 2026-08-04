@@ -1,0 +1,1 @@
+{"unit": "src/backend/base/langflow/api/v1/voice_mode.py::FunctionCall._send_function_call._call", "rule_id": "codeguard-py-code-injection-exec", "weakness_class": "CWE-94", "line_hint": 44, "why": "compile()/exec() of a caller-supplied string.", "symbol": "FunctionCall._send_function_call._call", "rel_file": "src/backend/base/langflow/api/v1/voice_mode.py"}

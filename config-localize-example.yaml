@@ -1,0 +1,65 @@
+# Foundry PoC Demo configuration — LOCALIZED RUN (Antares-scoped).
+#
+# Use with: python -m foundry_poc.cli localize --cwe CWE-22
+#
+# This config is identical to config.yaml EXCEPT:
+#   - include_globs is intentionally broad (the localizer overrides it dynamically)
+#   - goals mention the advisory-driven workflow
+#   - budget is lower (narrower scope needs fewer tokens)
+#
+# The `localize` command:
+#   1. Calls `antares query` with the --cwe you provide
+#   2. Takes the returned file list and expands scope (--expand directory)
+#   3. Overrides include_globs with the expanded scope
+#   4. Runs the Foundry pipeline on that narrower scope
+#
+# You can also use this config directly with `run` if you want to manually set
+# a narrow scope without Antares (just edit include_globs below).
+
+system:
+  name: "foundry-poc-localized"
+
+target:
+  path: "targets/langflow"
+  # These globs are OVERRIDDEN by the localizer at runtime. They serve as the
+  # fallback if you run `python -m foundry_poc.cli run --config config-localize-example.yaml`
+  # without the localize command.
+  include_globs:
+    - "src/backend/base/langflow/api/v1/*.py"
+  exclude_globs:
+    - "**/tests/**"
+    - "**/__pycache__/**"
+  pinned_ref: "1.7.3"
+
+goals: |
+  Advisory-driven evaluation: given a specific CWE identified by Antares,
+  perform deep governed analysis on the narrowed file scope. Focus on the
+  weakness class Antares flagged and related patterns.
+
+llm:
+  backend: "cursor"
+  model: "claude-sonnet-4-6"
+  scratch_cwd: ".scratch"
+
+batching:
+  detector_max_units: 25
+  detector_max_lines: 1200
+  triage_batch_size: 20
+
+budget:
+  # Lower cap for localized runs (narrower scope = fewer tokens needed).
+  max_tokens: 2000000
+  yield_window: 8
+  yield_min_true_positive_rate: 0.05
+
+severity:
+  scheme: "low_medium_high_critical"
+
+rules:
+  corpus_dir: "rules"
+
+store:
+  db_path: "out/findings.db"
+  provenance_log: "out/provenance.jsonl"
+  reports_dir: "out/findings"
+  rule_gaps_log: "out/rule-gaps.jsonl"

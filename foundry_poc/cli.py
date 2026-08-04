@@ -1,11 +1,13 @@
 """Foundry PoC command line.
 
-  up        verify environment + scope, fetch target if needed
-  models    list valid Cursor model slugs (requires CURSOR_API_KEY)
-  run       run the Foundry pipeline over the in-scope target
-  baseline  run the fair agentic baseline (single disciplined agent)
-  score     compare Foundry vs baseline on pre-registered metrics
-  status    show the last run summary
+  up          verify environment + scope, fetch target if needed
+  models      list valid Cursor model slugs (requires CURSOR_API_KEY)
+  run         run the Foundry pipeline over the in-scope target
+  baseline    run the fair agentic baseline (single disciplined agent)
+  score       compare Foundry vs baseline on pre-registered metrics
+  localize    narrow scope with Antares, then run the Foundry pipeline
+  synthesize  generate CodeGuard prevention rules from rule-gaps
+  status      show the last run summary
 """
 from __future__ import annotations
 
@@ -102,6 +104,72 @@ def _cmd_status(args) -> int:
     return 0
 
 
+def _cmd_synthesize(args) -> int:
+    cfg = load_config(args.config)
+    from .synthesizer import run_synthesis
+
+    gaps_file = Path(args.gaps_file) if args.gaps_file else None
+    output_dir = Path(args.output_dir) if args.output_dir else None
+
+    result = run_synthesis(
+        cfg,
+        gaps_file=gaps_file,
+        output_dir=output_dir,
+        cwe_filter=args.cwe,
+    )
+
+    if result["status"] in ("no-gaps", "no-match"):
+        print(result["message"])
+        return 0
+
+    print(f"\n{'='*60}")
+    print("SYNTHESIZER: Foundry -> CodeGuard")
+    print(f"{'='*60}")
+    print(f"  gaps file:      {result['gaps_file']}")
+    print(f"  output dir:     {result['output_dir']}")
+    print(f"  rules generated: {result['rules_generated']}")
+    print(f"  tokens used:    {result['budget']['total_tokens']}")
+    for r in result["results"]:
+        print(f"\n  [{r['cwe']}] ({r['duration_s']}s)")
+        print(f"    CodeGuard rule: {r['codeguard_rule']}")
+        print(f"    Foundry rule:   {r['foundry_rule']}")
+
+    print(f"\n  The generated CodeGuard rules will be loaded by AI coding assistants")
+    print(f"  in the target project to prevent this weakness class at authoring time.")
+    return 0
+
+
+def _cmd_localize(args) -> int:
+    from .localizer import localize_and_run, DEFAULT_ENDPOINT
+    endpoint = args.endpoint or DEFAULT_ENDPOINT
+    antares_repo = Path(args.antares_repo).resolve() if args.antares_repo else None
+
+    result = localize_and_run(
+        cfg_path=Path(args.config),
+        cwe=args.cwe,
+        expand=args.expand,
+        endpoint=endpoint,
+        model=args.model,
+        antares_repo=antares_repo,
+        limit_units=args.limit,
+    )
+
+    loc = result["localizer"]
+    pipeline = result["pipeline"]
+    print(f"\n{'='*60}")
+    print(f"LOCALIZER SUMMARY")
+    print(f"{'='*60}")
+    print(f"  antares files:   {loc['antares_files']}")
+    print(f"  antares time:    {loc['antares_duration_s']}s")
+    print(f"  expansion:       {loc['expansion_strategy']}")
+    print(f"  scope globs:     {loc['scope_globs']}")
+    print(f"  units analyzed:  {loc['units_narrowed']}")
+    print(f"\n  foundry report:  {pipeline['report_path']}")
+    print(f"  normalized json: {pipeline['normalized_path']}")
+    print(f"  tokens used:     {pipeline['budget']['total_tokens']} / {pipeline['budget']['max_tokens']}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="foundry-poc", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -123,6 +191,27 @@ def main(argv: list[str] | None = None) -> int:
     sp.set_defaults(func=_cmd_score)
 
     sub.add_parser("status", help="show recent runs").set_defaults(func=_cmd_status)
+
+    synp = sub.add_parser("synthesize", help="generate CodeGuard prevention rules from rule-gaps")
+    synp.add_argument("--gaps-file", default=None,
+                      help="path to rule-gaps.jsonl (default: from config store)")
+    synp.add_argument("--output-dir", default=None,
+                      help="output dir for CodeGuard rules (default: target/.cursor/rules/)")
+    synp.add_argument("--cwe", default=None,
+                      help="filter to a specific CWE (e.g. CWE-346)")
+    synp.set_defaults(func=_cmd_synthesize)
+
+    lp = sub.add_parser("localize", help="narrow scope with Antares, then run Foundry")
+    lp.add_argument("--cwe", required=True, help="CWE ID (e.g. CWE-22) passed to Antares CLI")
+    lp.add_argument("--expand", default="directory", choices=["exact", "directory", "parent", "full"],
+                    help="scope expansion strategy (default: directory)")
+    lp.add_argument("--endpoint", default=None,
+                    help="mlx-lm endpoint (default: http://127.0.0.1:8080/v1/completions)")
+    lp.add_argument("--model", default=None, help="Antares model path override")
+    lp.add_argument("--antares-repo", default=None,
+                    help="path to Antares repo (for auto-starting the server)")
+    lp.add_argument("--limit", type=int, default=None, help="cap units (smoke test)")
+    lp.set_defaults(func=_cmd_localize)
 
     args = p.parse_args(argv)
     return args.func(args)

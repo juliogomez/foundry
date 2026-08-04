@@ -116,8 +116,3 @@ the failures are clear fabrications and not just problems of format.
 - All the output files (`out/`) are kept: the Foundry report, the normalized JSON, the raw
   candidate list, the provenance log, the rule gaps, the raw baseline transcript
   and the comparison table.
-
-## What to read next
-
-Next in the guided path: **[ARCHITECTURE.md](ARCHITECTURE.md)** - how the two arms
-and the evidence gate described here map to the actual Python modules.

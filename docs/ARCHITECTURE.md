@@ -99,8 +99,3 @@ lifecycle and the flywheel real, with the omissions named and their costs owned.
 
 See [CUSTOMIZATION.md](CUSTOMIZATION.md) for how `config.yaml` and `rules/` turn
 this skeleton into *your* customized spec.
-
-## What to read next
-
-Next in the guided path: **[CUSTOMIZATION.md](CUSTOMIZATION.md)** - how `config.yaml`
-and `rules/` turn this engine into *your* customized spec, without touching the code.

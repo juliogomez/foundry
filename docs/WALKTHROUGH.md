@@ -167,8 +167,3 @@ Open `out/provenance.jsonl`. Every line is one event, a detector call, a triage
 verdict with its gate bookkeeping, a finding upsert. Pick any finding of the report
 and trace it back to the exact calls that produce it. This capacity to rebuild the
 history is one of the metrics that the baseline can not satisfy in a structural way.
-
-## What to read next
-
-Next in the guided path: **[RESULTS.md](RESULTS.md)** - the numbers from the real run
-and how to interpret them.

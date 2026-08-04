@@ -1,0 +1,24 @@
+{
+  "run_id": "run_3ef23d58a00f",
+  "meta": {
+    "target": "langflow",
+    "pinned_ref": "1.7.3",
+    "model": "claude-sonnet-4-6",
+    "backend": "cursor",
+    "units_analyzed": 5,
+    "candidates": 0,
+    "total_tokens": 3016,
+    "max_tokens": 6000000,
+    "stop_reason": "coverage-complete (all 5 units); trailing true-positive yield=0.00"
+  },
+  "budget": {
+    "calls": 1,
+    "input_tokens": 3012,
+    "output_tokens": 4,
+    "total_tokens": 3016,
+    "max_tokens": 6000000,
+    "exhausted": false
+  },
+  "raw_candidate_count": 0,
+  "reported_findings": []
+}
