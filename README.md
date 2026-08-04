@@ -45,7 +45,7 @@ address a different phase of the security lifecycle:
 
 | Project | Role | Input | Output |
 |---------|------|-------|--------|
-| **[Antares](https://github.com/CiscoDevNet/antares)** | Localize: identify which files are likely affected by a CWE | Security advisory | Ranked file shortlist |
+| **[Antares](https://huggingface.co/collections/fdtn-ai/antares)** | Localize: identify which files are likely affected by a CWE | Security advisory | Ranked file shortlist |
 | **[Foundry](https://github.com/CiscoDevNet/foundry-security-spec)** | Evaluate: governed detection, evidence-gated triage, deduplication | Code scope + rules | Verified findings + rule-gaps |
 | **[CodeGuard](https://project-codeguard.org/)** | Prevent: embed rules into AI coding agents so the weakness cannot be reintroduced | Rule-gaps | Always-on IDE guardrails |
 

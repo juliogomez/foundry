@@ -131,7 +131,7 @@ Three Cisco-originated projects form a single security loop:
 
 | Project | Role | Input | Output |
 |---------|------|-------|--------|
-| **[Antares](https://github.com/CiscoDevNet/antares)** | Scope reduction | Security advisory (CWE) | Ranked file list (likely-vulnerable locations) |
+| **[Antares](https://huggingface.co/collections/fdtn-ai/antares)** | Scope reduction | Security advisory (CWE) | Ranked file list (likely-vulnerable locations) |
 | **[Foundry](https://github.com/CiscoDevNet/foundry-security-spec)** | Governed detection + triage | Code scope + rules | Verified findings + rule-gaps |
 | **[CodeGuard](https://project-codeguard.org/)** | IDE prevention | Rule-gaps | Always-on guardrails for AI coding agents |
 

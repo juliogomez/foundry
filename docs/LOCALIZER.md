@@ -1,7 +1,7 @@
 # Localizer: Antares + Foundry Integration
 
 This optional advanced section describes how to use
-[Cisco Antares](https://github.com/jgomez2/antares) as a **scope-reduction step**
+[Cisco Antares](https://huggingface.co/collections/fdtn-ai/antares) as a **scope-reduction step**
 before running the Foundry pipeline. It is additive: the existing guided path
 (steps 1-7 in the README) remains unchanged and fully functional without Antares.
 
@@ -184,4 +184,4 @@ This integration uses the **official Antares CLI** (`antares query`), not
 the CLI is for product workflows with structured JSON/SARIF output.
 
 The Antares repo documents this distinction in
-[docs/VALUE.md](https://github.com/jgomez2/antares/blob/main/docs/VALUE.md#why-not-ciscos-official-cli-for-benchmarking).
+[docs/VALUE.md](https://github.com/juliogomez/antares/blob/main/docs/VALUE.md#why-not-ciscos-official-cli-for-benchmarking).
