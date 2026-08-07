@@ -38,8 +38,8 @@ skim that table once before you run so you know what each step is exercising.
 ## 1. Get the code and an isolated environment
 
 ```bash
-git clone https://github.com/juliogomez/foundry-poc-demo.git foundry-poc-demo
-cd foundry-poc-demo
+git clone https://github.com/juliogomez/foundry.git foundry
+cd foundry
 
 python3 -m venv .venv
 source .venv/bin/activate

@@ -1,9 +1,32 @@
 # Localizer: Antares + Foundry Integration
 
 This optional advanced section describes how to use
-[Cisco Antares](https://huggingface.co/collections/fdtn-ai/antares) as a **scope-reduction step**
+[Antares](https://github.com/juliogomez/antares) as a **scope-reduction step**
 before running the Foundry pipeline. It is additive: the existing guided path
 (steps 1-7 in the README) remains unchanged and fully functional without Antares.
+
+## The Antares repo
+
+The localizer depends on a sibling checkout of
+[**antares**](https://github.com/juliogomez/antares), a Cisco-originated project
+that answers a narrow question cheaply: *given a CWE from a security advisory,
+which files in this codebase are most likely affected?*
+
+Antares runs a small local model (via mlx-lm on Apple Silicon) and iteratively
+searches the repository. A typical query finishes in about 30 seconds and returns
+a ranked file shortlist. You do not need cloud inference or a full-repo LLM sweep
+just to decide where to look.
+
+That shortlist is what makes `foundry localize` practical. Foundry's governed
+pipeline is thorough but token-heavy; pointing it at 30–60 units instead of 289
+is how you respond to a specific advisory without paying for a full posture run.
+The Antares repo is where you get the CLI, the serve scripts, the benchmark
+harness, and the docs for how localization works on its own. Clone it next to this
+repo and install the CLI from there (see Prerequisites below).
+
+Models and weights live on
+[Hugging Face](https://huggingface.co/collections/fdtn-ai/antares); the GitHub repo
+is the code you run.
 
 ## The idea
 
@@ -179,9 +202,13 @@ Both modes remain available. The operator picks based on the situation.
 
 ## Relationship to the Antares repo
 
-This integration uses the **official Antares CLI** (`antares query`), not
-`minimal_agent.py` or `run_eval.py`. Those are for benchmarking and learning;
-the CLI is for product workflows with structured JSON/SARIF output.
+This integration uses the **official Antares CLI** (`antares query`) from
+[github.com/juliogomez/antares](https://github.com/juliogomez/antares), not
+`minimal_agent.py` or `run_eval.py`. Those scripts are for benchmarking and
+learning how the agent works; the CLI is what you want for product workflows
+(structured JSON/SARIF output, stable flags, pip-installable).
 
 The Antares repo documents this distinction in
 [docs/VALUE.md](https://github.com/juliogomez/antares/blob/main/docs/VALUE.md#why-not-ciscos-official-cli-for-benchmarking).
+If you want to understand hit rates, expansion trade-offs, or run the benchmark
+yourself before trusting the localizer here, start there.

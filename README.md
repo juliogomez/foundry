@@ -69,7 +69,7 @@ Numbers and methodology: **[RESULTS.md](docs/RESULTS.md)** and
 ## Quickstart
 
 ```bash
-git clone https://github.com/juliogomez/foundry-poc-demo.git && cd foundry-poc-demo
+git clone https://github.com/juliogomez/foundry.git && cd foundry
 
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
