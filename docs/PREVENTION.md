@@ -25,11 +25,10 @@ Every trial starts from a fresh workspace containing a small existing `app.py` a
 | Arm | Rules in `.cursor/rules/` |
 |---|---|
 | `none` (control) | none, apart from the canary |
-| `codeguard` | the 23 Project CodeGuard core rules, release v1.5.0 (pinned, checksum-verified by `scripts/fetch_codeguard.sh`) |
-| `codeguard+foundry` | core rules plus the two rules in `examples/synthesized/` (CWE-346 proxy-header trust, CWE-129 unchecked split index) |
+| `codeguard` | the 23 Project CodeGuard core rules, release v1.5.0 |
+| `codeguard+foundry` | core rules plus the two rules in `examples/synthesized` (CWE-346 proxy-header trust, CWE-129 unchecked split index) |
 
-The agent is a Cursor SDK local agent (`claude-sonnet-4-6`) with
-`setting_sources=["project"]`. It sees the workspace's project rules and nothing from
+The agent is a Cursor SDK local agent (claude-sonnet-4-6). It sees the workspace's project rules and nothing from
 the operator's user or team settings, so personal rules can't leak into any arm.
 
 ### Tasks
@@ -79,6 +78,28 @@ token usage and blind ids, is in `out-prevention/results.json`.
 | none | 5/24 (21%) | 5/12 (42%) | 0/12 |
 | codeguard | 4/24 (17%) | 4/12 (33%) | 0/12 |
 | codeguard+foundry | **0/24** | **0/12** | 0/12 |
+
+Each cell is the number of trials where the blind judge confirmed the task's target
+weakness, out of the trials in that group. Lower is better. Each arm has 24 trials
+(12 tasks × 2 repetitions), split evenly between the six Foundry-learned tasks and
+the six core-rule tasks.
+
+- **Foundry-learned classes.** These are the proxy-trust (CWE-346) and split-index
+  (CWE-129) tasks, where all of the difference shows up. Without rules, the agent
+  wrote the weakness in 5 of 12 trials. CodeGuard's core rules barely moved that
+  (4 of 12), because they don't cover these patterns. With the two Foundry-synthesized
+  rules added, it dropped to 0.
+- **Core-rule classes.** These are the SQL injection, command injection and path
+  traversal tasks. The agent got all of them right in every arm, rules or not.
+  This is a ceiling: the model already writes these safely, so the tasks can't
+  show what the core rules are worth. It isn't evidence that the core rules don't
+  work.
+- **All tasks.** This column just adds up the other two, so it repeats the
+  Foundry-learned result: 5, then 4, then 0 out of 24.
+
+These are the judge's raw verdicts. The [verdict audit](#verdict-audit) below
+re-reads them by hand. It moves the learned-rule arm to 0 or 1 of 24, depending on
+how strictly proxy trust is read.
 
 Per task, the effect is concentrated where the unprotected agent actually fails:
 
