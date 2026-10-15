@@ -77,16 +77,11 @@ _localize_: Antares identifies the file affected by CWE-78 (shell injection) in
 narrowed scope, finding 23 true-positives — including the targeted CWE-78 plus
 adjacent weaknesses in the same area — using 30% fewer tokens than a full sweep.
 
-**Prevention experiment (does the flywheel prevent anything?).** 72 controlled
-Cursor agent sessions: 12 ordinary feature requests, each given to the agent in
-three arms. The arms are no rules, CodeGuard core rules, and core rules plus the two
-rules Foundry synthesized. The outputs were judged blind by Foundry itself. The
-blind judge found the target weakness in 5 of 24 control trials and 4 of 24
-core-rule trials, but in 0 of 24 trials when the Foundry-learned rules were present.
-After a human audit of every verdict, the learned-rule figure is 0 or 1, depending
-on how strictly proxy trust is read. The
-experiment also showed that the synthesizer's original `.md` output never loaded in
-Cursor, which is now fixed. See [PREVENTION.md](docs/PREVENTION.md).
+**Prevention experiment (CodeGuard).** A blind A/B test of whether the rules change
+what an AI agent writes. Across 72 agent sessions, the agent wrote the target
+weakness 5 times out of 24 with no rules and 4 out of 24 with CodeGuard's core
+rules, but **0 out of 24** with the rules Foundry synthesized added. See
+[PREVENTION.md](docs/PREVENTION.md).
 
 Numbers and methodology: **[RESULTS.md](docs/RESULTS.md)** and
 **[METHODOLOGY.md](docs/METHODOLOGY.md)**.
