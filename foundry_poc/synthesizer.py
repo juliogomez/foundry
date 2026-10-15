@@ -27,8 +27,10 @@ from .config import Config
 from .llm import LLMBackend, make_backend
 
 CODEGUARD_RULE_TEMPLATE = """\
+---
 description: {description}
 globs: {globs}
+alwaysApply: false
 version: 1.0.0
 ---
 
@@ -232,7 +234,8 @@ def synthesize_rule(
         "cwe": cwe,
         "slug": slug,
         "codeguard_content": codeguard_content,
-        "codeguard_filename": f"codeguard-py-{slug}.md",
+        # Cursor only loads project rules with the .mdc extension and a leading "---".
+        "codeguard_filename": f"codeguard-py-{slug}.mdc",
         "foundry_content": foundry_content,
         "foundry_filename": f"py-{slug}.yaml",
         "usage": usage,

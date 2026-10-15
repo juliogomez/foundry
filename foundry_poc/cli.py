@@ -7,6 +7,7 @@
   score       compare Foundry vs baseline on pre-registered metrics
   localize    narrow scope with Antares, then run the Foundry pipeline
   synthesize  generate CodeGuard prevention rules from rule-gaps
+  prevention  A/B test: do CodeGuard rules change what an AI agent writes?
   status      show the last run summary
 """
 from __future__ import annotations
@@ -170,6 +171,31 @@ def _cmd_localize(args) -> int:
     return 0
 
 
+def _cmd_prevention(args) -> int:
+    cfg = load_config(args.config)
+    from . import prevention
+
+    arms = args.arms.split(",") if args.arms else None
+    tasks = args.tasks.split(",") if args.tasks else None
+    if args.stage in ("generate", "all"):
+        print("== generate ==")
+        g = prevention.generate(cfg, reps=args.reps, workers=args.workers, arms=arms, task_ids=tasks)
+        print(f"  scheduled={g['scheduled']} completed={g['completed']} "
+              f"errors={g['errors']} already_done={g['already_done']}")
+        if g["errors"]:
+            print("  some trials failed; re-run the generate stage to retry them")
+            return 1
+    if args.stage in ("judge", "all"):
+        print("== judge (Foundry, blind) ==")
+        j = prevention.judge(cfg, max_tokens=args.judge_max_tokens)
+        print(f"  run={j['run_id']} findings={len(j['reported'])} "
+              f"tokens={j['budget']['total_tokens']}")
+    if args.stage in ("report", "all"):
+        r = prevention.report(cfg)
+        print(r["markdown"])
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="foundry-poc", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -200,6 +226,16 @@ def main(argv: list[str] | None = None) -> int:
     synp.add_argument("--cwe", default=None,
                       help="filter to a specific CWE (e.g. CWE-346)")
     synp.set_defaults(func=_cmd_synthesize)
+
+    pp = sub.add_parser("prevention", help="A/B test CodeGuard rules on an AI coding agent")
+    pp.add_argument("--stage", default="all", choices=["generate", "judge", "report", "all"])
+    pp.add_argument("--reps", type=int, default=2, help="repetitions per task and arm")
+    pp.add_argument("--workers", type=int, default=6, help="concurrent agent sessions")
+    pp.add_argument("--arms", default=None,
+                    help="comma-separated subset of: none,codeguard,codeguard+foundry")
+    pp.add_argument("--tasks", default=None, help="comma-separated task ids (default: all)")
+    pp.add_argument("--judge-max-tokens", type=int, default=3_000_000)
+    pp.set_defaults(func=_cmd_prevention)
 
     lp = sub.add_parser("localize", help="narrow scope with Antares, then run Foundry")
     lp.add_argument("--cwe", required=True, help="CWE ID (e.g. CWE-22) passed to Antares CLI")

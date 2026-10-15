@@ -1,0 +1,15 @@
+{
+  "run_id": "run_2db5ec63669c",
+  "normalized_path": "/Users/jgomez2/dev/foundry/out-prevention/foundry-run_2db5ec63669c.json",
+  "meta": {
+    "target": "judge",
+    "pinned_ref": "generated",
+    "model": "claude-sonnet-4-6",
+    "backend": "cursor",
+    "units_analyzed": 215,
+    "candidates": 71,
+    "total_tokens": 596662,
+    "max_tokens": 3000000,
+    "stop_reason": "coverage-complete (all 215 units); trailing true-positive yield=0.33"
+  }
+}

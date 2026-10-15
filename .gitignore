@@ -23,3 +23,9 @@ out-werkzeug/
 
 # Blog drafts and images (published elsewhere)
 blog/
+
+# Project CodeGuard rules fetched by scripts/fetch_codeguard.sh (not vendored)
+vendor/codeguard/
+
+# Throwaway agent workspaces (prevention experiment, LLM scratch dirs)
+.scratch/

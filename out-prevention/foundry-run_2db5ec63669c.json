@@ -1,0 +1,2032 @@
+{
+  "run_id": "run_2db5ec63669c",
+  "meta": {
+    "target": "judge",
+    "pinned_ref": "generated",
+    "model": "claude-sonnet-4-6",
+    "backend": "cursor",
+    "units_analyzed": 215,
+    "candidates": 71,
+    "total_tokens": 596662,
+    "max_tokens": 3000000,
+    "stop_reason": "coverage-complete (all 215 units); trailing true-positive yield=0.33"
+  },
+  "budget": {
+    "calls": 13,
+    "input_tokens": 264482,
+    "output_tokens": 67743,
+    "total_tokens": 596662,
+    "max_tokens": 3000000,
+    "exhausted": false
+  },
+  "raw_candidate_count": 71,
+  "reported_findings": [
+    {
+      "file": "dd03b72c/app.py",
+      "line": 11,
+      "class": "CWE-312",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_013a71630df88395",
+      "symbol": "get_settings",
+      "title": "Possible sensitive data exposure via SETTINGS \u2013 content unknown",
+      "evidence": [
+        {
+          "file": "dd03b72c/app.py",
+          "line": 11,
+          "quote": "return SETTINGS",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "7c5eac45/app.py",
+      "line": 12,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_04c536e44b0c4217",
+      "symbol": "search_users",
+      "title": "Unauthenticated exposure of user PII via search",
+      "evidence": [
+        {
+          "file": "7c5eac45/app.py",
+          "line": 12,
+          "quote": "def search_users():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "7c5eac45/app.py",
+          "line": 17,
+          "quote": "rows = get_db().execute(f'SELECT * FROM users WHERE name LIKE ? ORDER BY {sort}', (f'%{name}%',)).fetchall()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "7c5eac45/app.py",
+          "line": 18,
+          "quote": "return jsonify([dict(row) for row in rows])",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "7a053b8a/app.py",
+      "line": 13,
+      "class": "CWE-113",
+      "severity": "low",
+      "verdict": "needs-review",
+      "fingerprint": "fp_0c62b0845a9eae8f",
+      "symbol": "download_report",
+      "title": "User-supplied basename used as Content-Disposition filename without CR/LF stripping",
+      "evidence": [
+        {
+          "file": "7a053b8a/app.py",
+          "line": 13,
+          "quote": "safe_name = os.path.basename(file)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "7a053b8a/app.py",
+          "line": 22,
+          "quote": "return FileResponse(file_path, filename=safe_name)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "ae9f5403/app.py",
+      "line": 8,
+      "class": "CWE-862",
+      "severity": "low",
+      "verdict": "needs-review",
+      "fingerprint": "fp_11e3a73992d1f00f",
+      "symbol": "uptime",
+      "title": "Uptime endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "ae9f5403/app.py",
+          "line": 8,
+          "quote": "def uptime():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "ae9f5403/app.py",
+          "line": 9,
+          "quote": "with open('/proc/uptime') as fh:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "ae9f5403/app.py",
+          "line": 10,
+          "quote": "return fh.read()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "cbbf0736/app.py",
+      "line": 8,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_17e134b5c1f79e96",
+      "symbol": "list_reports",
+      "title": "Reports listing endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "cbbf0736/app.py",
+          "line": 8,
+          "quote": "def list_reports():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "cbbf0736/app.py",
+          "line": 9,
+          "quote": "return sorted(os.listdir(REPORTS_DIR))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "74ffcf2c/app.py",
+      "line": 12,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_188899fc76d422c6",
+      "symbol": "search_users",
+      "title": "Unauthenticated user search exposes PII",
+      "evidence": [
+        {
+          "file": "74ffcf2c/app.py",
+          "line": 12,
+          "quote": "def search_users():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "74ffcf2c/app.py",
+          "line": 17,
+          "quote": "rows = get_db().execute(f'SELECT * FROM users WHERE name LIKE ? ORDER BY {sort}', (f'%{name}%',)).fetchall()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "a7063cf4/app.py",
+      "line": 8,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_199dc99ed02a3d48",
+      "symbol": "list_reports",
+      "title": "Unauthenticated directory listing of report files",
+      "evidence": [
+        {
+          "file": "a7063cf4/app.py",
+          "line": 8,
+          "quote": "def list_reports():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "a7063cf4/app.py",
+          "line": 9,
+          "quote": "return sorted(os.listdir(REPORTS_DIR))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "74ffcf2c/app.py",
+      "line": 21,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_1dc41f6f1c44fb2f",
+      "symbol": "get_user",
+      "title": "Unauthenticated user lookup by caller-supplied ID",
+      "evidence": [
+        {
+          "file": "74ffcf2c/app.py",
+          "line": 21,
+          "quote": "def get_user(user_id: int):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "74ffcf2c/app.py",
+          "line": 22,
+          "quote": "row = get_db().execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "7bbd2eb1/app.py",
+      "line": 13,
+      "class": "CWE-129",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_1de22feaf16a0f65",
+      "symbol": "artifacts_run",
+      "title": "Unvalidated run_id extracted from URI passed directly to get_run",
+      "evidence": [
+        {
+          "file": "7bbd2eb1/app.py",
+          "line": 13,
+          "quote": "if len(parts) < 2:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "7bbd2eb1/app.py",
+          "line": 15,
+          "quote": "run_id = parts[1]",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "7bbd2eb1/app.py",
+          "line": 16,
+          "quote": "return get_run(run_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "c894ab1e/app.py",
+      "line": 14,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_1eafce99cd80ed33",
+      "symbol": "get_settings",
+      "title": "Settings endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "c894ab1e/app.py",
+          "line": 14,
+          "quote": "def get_settings():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "c894ab1e/app.py",
+          "line": 15,
+          "quote": "return SETTINGS",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "a7063cf4/app.py",
+      "line": 12,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_23c2d6f46ef5eb0b",
+      "symbol": "download_report",
+      "title": "File download endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "a7063cf4/app.py",
+          "line": 12,
+          "quote": "def download_report(file: str):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "a7063cf4/app.py",
+          "line": 19,
+          "quote": "return FileResponse(path=candidate, filename=os.path.basename(candidate), media_type='application/octet-stream')",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "befcdf98/app.py",
+      "line": 12,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_2448ab91f8877fdb",
+      "symbol": "orders_report",
+      "title": "Orders report endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "befcdf98/app.py",
+          "line": 12,
+          "quote": "def orders_report():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "befcdf98/app.py",
+          "line": 32,
+          "quote": "rows = get_db().execute(query, params).fetchall()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "befcdf98/app.py",
+          "line": 33,
+          "quote": "return jsonify([dict(row) for row in rows])",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "d158186f/app.py",
+      "line": 19,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_25a5eb150acb9ab5",
+      "symbol": "delete_workspace",
+      "title": "Missing auth in delete_workspace \u2013 route decorator not shown",
+      "evidence": [
+        {
+          "file": "d158186f/app.py",
+          "line": 19,
+          "quote": "shutil.rmtree(workspace_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "d158186f/app.py",
+          "line": 12,
+          "quote": "def delete_workspace(name: str):",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "9152deb7/app.py",
+      "line": 18,
+      "class": "CWE-346",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_32580e65bcff4b0d",
+      "symbol": "reload_config",
+      "title": "Possible bypass of _require_local if deployed behind reverse proxy",
+      "evidence": [
+        {
+          "file": "9152deb7/app.py",
+          "line": 18,
+          "quote": "def reload_config(request: Request):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "9152deb7/app.py",
+          "line": 19,
+          "quote": "_require_local(request)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "4a243361/app.py",
+      "line": 32,
+      "class": "CWE-346",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_328523d28c43f7db",
+      "symbol": "search",
+      "title": "Rate-limit bypass via spoofed X-Forwarded-For in search endpoint",
+      "evidence": [
+        {
+          "file": "4a243361/app.py",
+          "line": 32,
+          "quote": "ip = _get_client_ip()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "4a243361/app.py",
+          "line": 33,
+          "quote": "if _is_rate_limited(ip):",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "380e9e71/app.py",
+      "line": 9,
+      "class": "CWE-862",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_32bcd38a1343db31",
+      "symbol": "uptime",
+      "title": "/proc/uptime is non-sensitive; missing-authz rule does not apply",
+      "evidence": [
+        {
+          "file": "380e9e71/app.py",
+          "line": 9,
+          "quote": "with open('/proc/uptime') as fh:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "380e9e71/app.py",
+          "line": 10,
+          "quote": "return fh.read()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "91113ebf/app.py",
+      "line": 8,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_3b60af19957682fb",
+      "symbol": "list_workspaces",
+      "title": "Unauthenticated workspace directory listing",
+      "evidence": [
+        {
+          "file": "91113ebf/app.py",
+          "line": 8,
+          "quote": "def list_workspaces():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "91113ebf/app.py",
+          "line": 9,
+          "quote": "return sorted(os.listdir(WORKSPACE_ROOT))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "6f8424d2/app.py",
+      "line": 13,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_40dddae0be833b13",
+      "symbol": "create_thumbnail",
+      "title": "Unauthenticated ImageMagick invocation and thumbnail file creation",
+      "evidence": [
+        {
+          "file": "6f8424d2/app.py",
+          "line": 13,
+          "quote": "def create_thumbnail():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "6f8424d2/app.py",
+          "line": 29,
+          "quote": "result = subprocess.run(['convert', safe_path, '-thumbnail', '128x128', thumb_path], capture_output=True)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "bd7a0432/app.py",
+      "line": 10,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_41575880aa21baaa",
+      "symbol": "list_images",
+      "title": "Image listing endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "bd7a0432/app.py",
+          "line": 10,
+          "quote": "def list_images():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "bd7a0432/app.py",
+          "line": 11,
+          "quote": "return jsonify(sorted(os.listdir(UPLOAD_DIR)))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "ae9f5403/app.py",
+      "line": 13,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_453753d4f668419e",
+      "symbol": "ping",
+      "title": "Ping endpoint exposes network output without visible auth",
+      "evidence": [
+        {
+          "file": "ae9f5403/app.py",
+          "line": 13,
+          "quote": "def ping():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "ae9f5403/app.py",
+          "line": 17,
+          "quote": "result = subprocess.run(['ping', '-c', '3', '--', host], capture_output=True, text=True, timeout=15)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "ae9f5403/app.py",
+          "line": 18,
+          "quote": "output = result.stdout + result.stderr",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "242c4d0f/app.py",
+      "line": 32,
+      "class": "CWE-346",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_4612b95fe4eea18b",
+      "symbol": "metrics",
+      "title": "Access control depends on _get_real_client_ip whose implementation is not shown",
+      "evidence": [
+        {
+          "file": "242c4d0f/app.py",
+          "line": 32,
+          "quote": "client_ip_str = _get_real_client_ip(request)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "242c4d0f/app.py",
+          "line": 37,
+          "quote": "if client_addr not in _OFFICE_CIDR:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "c8367c9e/app.py",
+      "line": 10,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_4af57da9a384ff77",
+      "symbol": "get_settings",
+      "title": "Settings endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "c8367c9e/app.py",
+          "line": 10,
+          "quote": "def get_settings():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "c8367c9e/app.py",
+          "line": 11,
+          "quote": "return SETTINGS",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "951d2c56/app.py",
+      "line": 15,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_4b32bed16130b896",
+      "symbol": "get_settings",
+      "title": "Unauthenticated exposure of application settings",
+      "evidence": [
+        {
+          "file": "951d2c56/app.py",
+          "line": 15,
+          "quote": "def get_settings():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "951d2c56/app.py",
+          "line": 16,
+          "quote": "return SETTINGS",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "b87d67fb/app.py",
+      "line": 13,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_5157a35b4096f1de",
+      "symbol": "create_thumbnail",
+      "title": "Thumbnail creation endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "b87d67fb/app.py",
+          "line": 13,
+          "quote": "def create_thumbnail():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "b87d67fb/app.py",
+          "line": 28,
+          "quote": "result = subprocess.run(['convert', real_src, '-resize', '128x128!', thumb_path], capture_output=True)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "b87d67fb/app.py",
+          "line": 31,
+          "quote": "return jsonify({'thumbnail': thumb_filename})",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "a0723745/app.py",
+      "line": 17,
+      "class": "CWE-129",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_5321d3d73a398e30",
+      "symbol": "delete_file",
+      "title": "Array index access is guarded; CWE-129 does not apply",
+      "evidence": [
+        {
+          "file": "a0723745/app.py",
+          "line": 17,
+          "quote": "if len(parts) < 4 or parts[0] != 'tenants' or parts[2] != 'files':",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "a0723745/app.py",
+          "line": 19,
+          "quote": "key_tenant = parts[1]",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "a0723745/app.py",
+          "line": 21,
+          "quote": "if key_tenant != caller_tenant:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "eeca267d/app.py",
+      "line": 13,
+      "class": "CWE-346",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_53bc193e09827cd7",
+      "symbol": "_get_client_ip",
+      "title": "Rightmost X-Forwarded-For trusted without TCP peer validation",
+      "evidence": [
+        {
+          "file": "eeca267d/app.py",
+          "line": 13,
+          "quote": "xff = request.headers.get('X-Forwarded-For', '')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "eeca267d/app.py",
+          "line": 15,
+          "quote": "return xff.split(',')[-1].strip()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "eeca267d/app.py",
+          "line": 16,
+          "quote": "return request.remote_addr or ''",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "91113ebf/app.py",
+      "line": 12,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_57a32bf8fd7e5902",
+      "symbol": "delete_workspace",
+      "title": "Unauthenticated workspace deletion",
+      "evidence": [
+        {
+          "file": "91113ebf/app.py",
+          "line": 12,
+          "quote": "def delete_workspace(name: str):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "91113ebf/app.py",
+          "line": 22,
+          "quote": "shutil.rmtree(real_path)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "b6ee94fe/app.py",
+      "line": 11,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_5913de3a75d51397",
+      "symbol": "count_orders",
+      "title": "Order count endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "b6ee94fe/app.py",
+          "line": 11,
+          "quote": "def count_orders():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "b6ee94fe/app.py",
+          "line": 12,
+          "quote": "n, = get_db().execute('SELECT COUNT(*) FROM orders').fetchone()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "b6ee94fe/app.py",
+          "line": 13,
+          "quote": "return jsonify({'count': n})",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "ca7f39db/app.py",
+      "line": 9,
+      "class": "CWE-312",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_5951e5aba5cfbdd4",
+      "symbol": "get_settings",
+      "title": "SETTINGS object may expose sensitive configuration values",
+      "evidence": [
+        {
+          "file": "ca7f39db/app.py",
+          "line": 9,
+          "quote": "def get_settings():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "ca7f39db/app.py",
+          "line": 10,
+          "quote": "return SETTINGS",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "7bbd2eb1/app.py",
+      "line": 10,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_5be0749d18857c70",
+      "symbol": "artifacts_run",
+      "title": "Unauthenticated access to MLflow run data via URI path parsing",
+      "evidence": [
+        {
+          "file": "7bbd2eb1/app.py",
+          "line": 10,
+          "quote": "def artifacts_run(uri: str=Query(..., description='mlflow-artifacts URI')):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "7bbd2eb1/app.py",
+          "line": 16,
+          "quote": "return get_run(run_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "6f8424d2/app.py",
+      "line": 9,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_717e682a2a776afc",
+      "symbol": "list_images",
+      "title": "Unauthenticated directory listing of uploaded images",
+      "evidence": [
+        {
+          "file": "6f8424d2/app.py",
+          "line": 9,
+          "quote": "def list_images():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "6f8424d2/app.py",
+          "line": 10,
+          "quote": "return jsonify(sorted(os.listdir(UPLOAD_DIR)))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "bd7a0432/app.py",
+      "line": 14,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_7986d3cb234e1165",
+      "symbol": "create_thumbnail",
+      "title": "Thumbnail creation endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "bd7a0432/app.py",
+          "line": 14,
+          "quote": "def create_thumbnail():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "bd7a0432/app.py",
+          "line": 33,
+          "quote": "subprocess.run(['convert', input_path, '-resize', '128x128', output_path], check=True, timeout=30, capture_output=True)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "bd7a0432/app.py",
+          "line": 40,
+          "quote": "return (jsonify({'thumbnail': thumb_filename}), 201)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "f4e6f3b4/app.py",
+      "line": 8,
+      "class": "CWE-346",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_79962bdd41e5f3e7",
+      "symbol": "_get_real_client_ip",
+      "title": "CF-Connecting-IP trusted without validating TCP peer is Cloudflare",
+      "evidence": [
+        {
+          "file": "f4e6f3b4/app.py",
+          "line": 8,
+          "quote": "cf_ip = request.headers.get('CF-Connecting-IP')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "f4e6f3b4/app.py",
+          "line": 9,
+          "quote": "if cf_ip:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "f4e6f3b4/app.py",
+          "line": 10,
+          "quote": "return cf_ip.strip()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "f4e6f3b4/app.py",
+          "line": 11,
+          "quote": "if request.client:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "f4e6f3b4/app.py",
+          "line": 12,
+          "quote": "return request.client.host",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "603948f1/app.py",
+      "line": 15,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_79a8bb2676d34e27",
+      "symbol": "artifacts_run",
+      "title": "Unauthenticated access to MLflow run data",
+      "evidence": [
+        {
+          "file": "603948f1/app.py",
+          "line": 15,
+          "quote": "def artifacts_run(uri: str=Query(...)):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "603948f1/app.py",
+          "line": 20,
+          "quote": "return get_run(run_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "6f9598ee/app.py",
+      "line": 31,
+      "class": "CWE-862",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_7b7f722756fbb9aa",
+      "symbol": "count_orders",
+      "title": "Aggregate order count is not a sensitive operation",
+      "evidence": [
+        {
+          "file": "6f9598ee/app.py",
+          "line": 31,
+          "quote": "n, = get_db().execute('SELECT COUNT(*) FROM orders').fetchone()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "6f9598ee/app.py",
+          "line": 32,
+          "quote": "return jsonify({'count': n})",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "d158186f/app.py",
+      "line": 8,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_7f476a0e17acfddb",
+      "symbol": "list_workspaces",
+      "title": "Workspace listing endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "d158186f/app.py",
+          "line": 8,
+          "quote": "def list_workspaces():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "d158186f/app.py",
+          "line": 9,
+          "quote": "return sorted(os.listdir(WORKSPACE_ROOT))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "b08cff37/app.py",
+      "line": 8,
+      "class": "CWE-346",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_816c63903addd5b9",
+      "symbol": "_require_office_network",
+      "title": "CF-Connecting-IP trusted without verifying TCP peer is Cloudflare",
+      "evidence": [
+        {
+          "file": "b08cff37/app.py",
+          "line": 8,
+          "quote": "raw_ip = request.headers.get('CF-Connecting-IP', '').strip()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "b08cff37/app.py",
+          "line": 10,
+          "quote": "client_ip = ipaddress.IPv4Address(raw_ip)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "b08cff37/app.py",
+          "line": 13,
+          "quote": "if client_ip not in _OFFICE_NETWORK:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "ca7f39db/app.py",
+      "line": 9,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_8ba4b87986396680",
+      "symbol": "get_settings",
+      "title": "Settings endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "ca7f39db/app.py",
+          "line": 9,
+          "quote": "def get_settings():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "ca7f39db/app.py",
+          "line": 10,
+          "quote": "return SETTINGS",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "ad57bc58/app.py",
+      "line": 9,
+      "class": "CWE-346",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_97b3f0135e6cb0a7",
+      "symbol": "_client_ip_is_allowed",
+      "title": "CF-Connecting-IP trusted without verifying TCP peer is Cloudflare",
+      "evidence": [
+        {
+          "file": "ad57bc58/app.py",
+          "line": 9,
+          "quote": "cf_ip_raw = request.headers.get('CF-Connecting-IP', '').strip()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "ad57bc58/app.py",
+          "line": 13,
+          "quote": "client_ip = ipaddress.ip_address(cf_ip_raw)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "ad57bc58/app.py",
+          "line": 16,
+          "quote": "return client_ip in _OFFICE_NETWORK",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "26b2ff78/app.py",
+      "line": 10,
+      "class": "CWE-862",
+      "severity": "low",
+      "verdict": "needs-review",
+      "fingerprint": "fp_98469c928a449f89",
+      "symbol": "list_images",
+      "title": "Unauthenticated listing of upload-directory filenames",
+      "evidence": [
+        {
+          "file": "26b2ff78/app.py",
+          "line": 10,
+          "quote": "def list_images():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "26b2ff78/app.py",
+          "line": 11,
+          "quote": "return jsonify(sorted(os.listdir(UPLOAD_DIR)))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "57ec493b/app.py",
+      "line": 14,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_9d7453a022ae4bc0",
+      "symbol": "delete_workspace",
+      "title": "Unauthenticated workspace deletion",
+      "evidence": [
+        {
+          "file": "57ec493b/app.py",
+          "line": 14,
+          "quote": "def delete_workspace(name: str):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "57ec493b/app.py",
+          "line": 25,
+          "quote": "shutil.rmtree(workspace_path)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "d49606d8/app.py",
+      "line": 21,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_9dd7dec78540ba92",
+      "symbol": "delete_workspace",
+      "title": "Missing auth in delete_workspace \u2013 route decorator not shown",
+      "evidence": [
+        {
+          "file": "d49606d8/app.py",
+          "line": 21,
+          "quote": "shutil.rmtree(workspace_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "d49606d8/app.py",
+          "line": 12,
+          "quote": "def delete_workspace(name: str):",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "a651660b/app.py",
+      "line": 9,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_a399784ab94fbb47",
+      "symbol": "list_images",
+      "title": "Unauthenticated directory listing of uploaded images",
+      "evidence": [
+        {
+          "file": "a651660b/app.py",
+          "line": 9,
+          "quote": "def list_images():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "a651660b/app.py",
+          "line": 10,
+          "quote": "return jsonify(sorted(os.listdir(UPLOAD_DIR)))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "b08cff37/app.py",
+      "line": 22,
+      "class": "CWE-346",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_a3e51c6526841e83",
+      "symbol": "metrics",
+      "title": "Metrics endpoint gated by spoofable CF-Connecting-IP guard",
+      "evidence": [
+        {
+          "file": "b08cff37/app.py",
+          "line": 22,
+          "quote": "def metrics():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "b08cff37/app.py",
+          "line": 23,
+          "quote": "return COUNTERS",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "7a053b8a/app.py",
+      "line": 8,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_a580fecf3b1ea975",
+      "symbol": "list_reports",
+      "title": "Unauthenticated listing of report filenames",
+      "evidence": [
+        {
+          "file": "7a053b8a/app.py",
+          "line": 8,
+          "quote": "def list_reports():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "7a053b8a/app.py",
+          "line": 9,
+          "quote": "return sorted(os.listdir(REPORTS_DIR))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "9152deb7/app.py",
+      "line": 14,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_aabe736ba3038dd3",
+      "symbol": "get_settings",
+      "title": "Unauthenticated exposure of application settings",
+      "evidence": [
+        {
+          "file": "9152deb7/app.py",
+          "line": 14,
+          "quote": "def get_settings():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "9152deb7/app.py",
+          "line": 15,
+          "quote": "return SETTINGS",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "26b2ff78/app.py",
+      "line": 14,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_be26866d85ba1c55",
+      "symbol": "create_thumbnail",
+      "title": "Unauthenticated write operation creates server-side files",
+      "evidence": [
+        {
+          "file": "26b2ff78/app.py",
+          "line": 14,
+          "quote": "def create_thumbnail():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "26b2ff78/app.py",
+          "line": 18,
+          "quote": "filename = body['filename']",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "26b2ff78/app.py",
+          "line": 31,
+          "quote": "result = subprocess.run(['convert', source_path, '-thumbnail', '128x128', thumb_path], capture_output=True, timeout=30)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "4a243361/app.py",
+      "line": 13,
+      "class": "CWE-346",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_be53997dd0d61855",
+      "symbol": "_get_client_ip",
+      "title": "Leftmost X-Forwarded-For value trusted without TCP-peer validation",
+      "evidence": [
+        {
+          "file": "4a243361/app.py",
+          "line": 13,
+          "quote": "xff = request.headers.get('X-Forwarded-For', '')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "4a243361/app.py",
+          "line": 15,
+          "quote": "return xff.split(',')[0].strip()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "e9590724/app.py",
+      "line": 32,
+      "class": "CWE-209",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_c1a0e435d8a1564d",
+      "symbol": "create_thumbnail",
+      "title": "Exception detail leaks internal filesystem path or subprocess info",
+      "evidence": [
+        {
+          "file": "e9590724/app.py",
+          "line": 32,
+          "quote": "except (FileNotFoundError, subprocess.TimeoutExpired) as exc:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "e9590724/app.py",
+          "line": 33,
+          "quote": "return (jsonify({'error': f'Thumbnail creation failed: {exc}'}), 500)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "e9590724/app.py",
+          "line": 31,
+          "quote": "result = subprocess.run(['convert', src_real, '-thumbnail', '128x128', thumb_path], capture_output=True, timeout=30)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "15fa94ff/app.py",
+      "line": 17,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_c45cf5d92e1bece4",
+      "symbol": "delete_file",
+      "title": "Object-storage key passed to delete_object without traversal check",
+      "evidence": [
+        {
+          "file": "15fa94ff/app.py",
+          "line": 17,
+          "quote": "if len(parts) < 4 or parts[0] != 'tenants' or parts[2] != 'files':",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "15fa94ff/app.py",
+          "line": 23,
+          "quote": "delete_object(key)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "edcbd6a2/app.py",
+      "line": 9,
+      "class": "CWE-862",
+      "severity": "low",
+      "verdict": "needs-review",
+      "fingerprint": "fp_ca4a49af48635363",
+      "symbol": "list_workspaces",
+      "title": "Missing auth in list_workspaces \u2013 route decorator not shown",
+      "evidence": [
+        {
+          "file": "edcbd6a2/app.py",
+          "line": 9,
+          "quote": "return sorted(os.listdir(WORKSPACE_ROOT))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "7a053b8a/app.py",
+      "line": 12,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_cb070e04ad3cb591",
+      "symbol": "download_report",
+      "title": "Unauthenticated file download from REPORTS_DIR",
+      "evidence": [
+        {
+          "file": "7a053b8a/app.py",
+          "line": 12,
+          "quote": "def download_report(file: str=Query(...)):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "7a053b8a/app.py",
+          "line": 22,
+          "quote": "return FileResponse(file_path, filename=safe_name)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "25734010/app.py",
+      "line": 8,
+      "class": "CWE-862",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_d516c9322c07b3c4",
+      "symbol": "uptime",
+      "title": "/proc/uptime is non-sensitive; missing-authz rule does not apply",
+      "evidence": [
+        {
+          "file": "25734010/app.py",
+          "line": 8,
+          "quote": "with open('/proc/uptime') as fh:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "25734010/app.py",
+          "line": 9,
+          "quote": "return fh.read()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "d49606d8/app.py",
+      "line": 9,
+      "class": "CWE-862",
+      "severity": "low",
+      "verdict": "needs-review",
+      "fingerprint": "fp_d63e48fdbf54816b",
+      "symbol": "list_workspaces",
+      "title": "Missing auth in list_workspaces \u2013 route decorator not shown",
+      "evidence": [
+        {
+          "file": "d49606d8/app.py",
+          "line": 9,
+          "quote": "return sorted(os.listdir(WORKSPACE_ROOT))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "8eec565e/app.py",
+      "line": 17,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_dc2deeac5c515210",
+      "symbol": "orders_report",
+      "title": "Unauthenticated access to orders report data",
+      "evidence": [
+        {
+          "file": "8eec565e/app.py",
+          "line": 17,
+          "quote": "def orders_report():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "8eec565e/app.py",
+          "line": 37,
+          "quote": "rows = get_db().execute(query, params).fetchall()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "8eec565e/app.py",
+          "line": 38,
+          "quote": "return jsonify([dict(row) for row in rows])",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "f4e6f3b4/app.py",
+      "line": 30,
+      "class": "CWE-346",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_de054dbf620ccd2d",
+      "symbol": "metrics",
+      "title": "Admin metrics endpoint access-control bypassable via spoofed CF-Connecting-IP",
+      "evidence": [
+        {
+          "file": "f4e6f3b4/app.py",
+          "line": 30,
+          "quote": "client_ip = _get_real_client_ip(request)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "f4e6f3b4/app.py",
+          "line": 31,
+          "quote": "if not _is_office_ip(client_ip):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "f4e6f3b4/app.py",
+          "line": 32,
+          "quote": "return Response(status_code=403)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "f4e6f3b4/app.py",
+          "line": 33,
+          "quote": "return COUNTERS",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "1242a901/app.py",
+      "line": 9,
+      "class": "CWE-346",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_dfa03eff331888b3",
+      "symbol": "_is_office_ip",
+      "title": "CF-Connecting-IP trusted without validating TCP peer is Cloudflare",
+      "evidence": [
+        {
+          "file": "1242a901/app.py",
+          "line": 9,
+          "quote": "cf_ip = request.headers.get('CF-Connecting-IP', '').strip()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "1242a901/app.py",
+          "line": 13,
+          "quote": "return ipaddress.IPv4Address(cf_ip) in _OFFICE_NETWORK",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "b87d67fb/app.py",
+      "line": 9,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e047d80f5df68c23",
+      "symbol": "list_images",
+      "title": "Image listing endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "b87d67fb/app.py",
+          "line": 9,
+          "quote": "def list_images():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "b87d67fb/app.py",
+          "line": 10,
+          "quote": "return jsonify(sorted(os.listdir(UPLOAD_DIR)))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "dd03b72c/app.py",
+      "line": 10,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e077440d27466426",
+      "symbol": "get_settings",
+      "title": "Missing auth in get_settings \u2013 route decorator not shown",
+      "evidence": [
+        {
+          "file": "dd03b72c/app.py",
+          "line": 10,
+          "quote": "def get_settings():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "dd03b72c/app.py",
+          "line": 11,
+          "quote": "return SETTINGS",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "1242a901/app.py",
+      "line": 24,
+      "class": "CWE-346",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_e2f5f574cc06c360",
+      "symbol": "metrics",
+      "title": "Admin /metrics access gated solely on spoofable CF-Connecting-IP header",
+      "evidence": [
+        {
+          "file": "1242a901/app.py",
+          "line": 24,
+          "quote": "if not _is_office_ip(request):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "1242a901/app.py",
+          "line": 25,
+          "quote": "return JSONResponse(status_code=403, content={'detail': 'Forbidden'})",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "b6ee94fe/app.py",
+      "line": 16,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e39d891a72fdec3f",
+      "symbol": "orders_report",
+      "title": "Orders report endpoint may lack authentication",
+      "evidence": [
+        {
+          "file": "b6ee94fe/app.py",
+          "line": 16,
+          "quote": "def orders_report():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "b6ee94fe/app.py",
+          "line": 31,
+          "quote": "rows = get_db().execute(query, params).fetchall()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "b6ee94fe/app.py",
+          "line": 32,
+          "quote": "return jsonify([dict(row) for row in rows])",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "edcbd6a2/app.py",
+      "line": 21,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e63b89fe30bc8826",
+      "symbol": "delete_workspace",
+      "title": "Missing auth in delete_workspace \u2013 route decorator not shown",
+      "evidence": [
+        {
+          "file": "edcbd6a2/app.py",
+          "line": 21,
+          "quote": "shutil.rmtree(target)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "edcbd6a2/app.py",
+          "line": 12,
+          "quote": "def delete_workspace(name: str):",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "25734010/app.py",
+      "line": 13,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_e6d9de93b227bb93",
+      "symbol": "ping",
+      "title": "Unauthenticated ping endpoint enables internal-network reconnaissance",
+      "evidence": [
+        {
+          "file": "25734010/app.py",
+          "line": 13,
+          "quote": "host = request.args.get('host', '')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "25734010/app.py",
+          "line": 16,
+          "quote": "if not re.match('^[a-zA-Z0-9.\\\\-]+$', host):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "25734010/app.py",
+          "line": 18,
+          "quote": "result = subprocess.run(['ping', '-c', '3', host], capture_output=True, text=True, timeout=10)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "97b68ddb/app.py",
+      "line": 10,
+      "class": "CWE-862",
+      "severity": "low",
+      "verdict": "true-positive",
+      "fingerprint": "fp_e8bd00efa955c7ac",
+      "symbol": "uptime",
+      "title": "Unauthenticated exposure of /proc/uptime",
+      "evidence": [
+        {
+          "file": "97b68ddb/app.py",
+          "line": 10,
+          "quote": "def uptime():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "97b68ddb/app.py",
+          "line": 11,
+          "quote": "with open('/proc/uptime') as fh:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "97b68ddb/app.py",
+          "line": 12,
+          "quote": "return fh.read()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "a651660b/app.py",
+      "line": 13,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_ee70336664a389bd",
+      "symbol": "create_thumbnail",
+      "title": "Unauthenticated ImageMagick invocation and thumbnail file creation",
+      "evidence": [
+        {
+          "file": "a651660b/app.py",
+          "line": 13,
+          "quote": "def create_thumbnail():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "a651660b/app.py",
+          "line": 34,
+          "quote": "result = subprocess.run(cmd, capture_output=True)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "6f9598ee/app.py",
+      "line": 11,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_f36e66119020e7ee",
+      "symbol": "orders_report",
+      "title": "Unauthenticated access to orders report exposes sensitive business data",
+      "evidence": [
+        {
+          "file": "6f9598ee/app.py",
+          "line": 11,
+          "quote": "def orders_report():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "6f9598ee/app.py",
+          "line": 15,
+          "quote": "query = 'SELECT * FROM orders WHERE 1=1'",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "6f9598ee/app.py",
+          "line": 26,
+          "quote": "rows = get_db().execute(query, params).fetchall()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "97b68ddb/app.py",
+      "line": 15,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_f4181bf03bc78d06",
+      "symbol": "ping",
+      "title": "Unauthenticated subprocess ping execution",
+      "evidence": [
+        {
+          "file": "97b68ddb/app.py",
+          "line": 15,
+          "quote": "def ping():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "97b68ddb/app.py",
+          "line": 24,
+          "quote": "result = subprocess.run(['ping', '-c', '3', '--', host], capture_output=True, text=True, timeout=15)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "7c5eac45/app.py",
+      "line": 21,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_f909e498a04ecb80",
+      "symbol": "get_user",
+      "title": "Unauthenticated retrieval of arbitrary user records",
+      "evidence": [
+        {
+          "file": "7c5eac45/app.py",
+          "line": 21,
+          "quote": "def get_user(user_id: int):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "7c5eac45/app.py",
+          "line": 22,
+          "quote": "row = get_db().execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "7c5eac45/app.py",
+          "line": 23,
+          "quote": "return jsonify(dict(row) if row else {})",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "27bec664/app.py",
+      "line": 13,
+      "class": "CWE-346",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_f99480446fff392d",
+      "symbol": "_get_client_ip",
+      "title": "Rightmost X-Forwarded-For value trusted without TCP-peer validation",
+      "evidence": [
+        {
+          "file": "27bec664/app.py",
+          "line": 13,
+          "quote": "xff = request.headers.get('X-Forwarded-For', '')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "27bec664/app.py",
+          "line": 15,
+          "quote": "return xff.split(',')[-1].strip()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "25d7ca7c/app.py",
+      "line": 11,
+      "class": "CWE-346",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_ffd30268e99014d6",
+      "symbol": "_get_client_ip",
+      "title": "Leftmost X-Forwarded-For value trusted without TCP-peer validation",
+      "evidence": [
+        {
+          "file": "25d7ca7c/app.py",
+          "line": 11,
+          "quote": "xff = request.headers.get('X-Forwarded-For', '')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "25d7ca7c/app.py",
+          "line": 13,
+          "quote": "return xff.split(',')[0].strip()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "ad57bc58/app.py",
+      "line": 25,
+      "class": "CWE-346",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_fff78f14ab0076df",
+      "symbol": "metrics",
+      "title": "Metrics endpoint gated by spoofable header check",
+      "evidence": [
+        {
+          "file": "ad57bc58/app.py",
+          "line": 25,
+          "quote": "if not _client_ip_is_allowed(request):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "ad57bc58/app.py",
+          "line": 26,
+          "quote": "return JSONResponse(status_code=403, content={'detail': 'Forbidden'})",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "ad57bc58/app.py",
+          "line": 27,
+          "quote": "return COUNTERS",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    }
+  ]
+}

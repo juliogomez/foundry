@@ -88,7 +88,7 @@ The synthesizer:
 1. Reads `out/rule-gaps.jsonl` and deduplicates by CWE
 2. For each unique gap, calls the LLM with the gap context and a structured prompt
 3. Generates **two** outputs per gap:
-   - A **CodeGuard prevention rule** (`.cursor/rules/codeguard-py-<slug>.md`), the
+   - A **CodeGuard prevention rule** (`.cursor/rules/codeguard-py-<slug>.mdc`), the
      IDE-level guardrail that prevents the weakness at authoring time
    - A **Foundry detection rule** (`rules/py-<slug>.yaml`), which ensures future runs
      catch existing instances of the same pattern
@@ -99,6 +99,15 @@ The generated CodeGuard markdown rule is placed in the target project's
 `.cursor/rules/` directory. The next time any developer opens that project in their
 AI-assisted IDE, the rule is active. No deployment, no pipeline, no manual
 configuration. The prevention *is* the file.
+
+The file has to be in the format the agent actually loads. Cursor reads project
+rules only from `.mdc` files that start with a `---` frontmatter block. A `.md`
+file with identical content in `.cursor/rules/` is silently ignored. Early versions of the
+synthesizer wrote `.md` files, so those rules never reached the assistant. A canary
+test in the [prevention experiment](PREVENTION.md#rule-delivery-what-we-learned)
+caught it. The synthesizer now writes `.mdc` files with `alwaysApply: false` and a
+`globs` scope. That means a rule attaches when the agent works on a matching file.
+Cursor SDK agents also need `setting_sources=["project"]` to load project rules at all.
 
 ### Options
 
@@ -174,7 +183,7 @@ The actual `rule-gaps.jsonl` in this PoC contains the following confirmed gap:
 
 Running `python -m foundry_poc.cli synthesize --cwe CWE-346` produces:
 
-**CodeGuard prevention rule** (`target/.cursor/rules/codeguard-py-cwe-346.md`):
+**CodeGuard prevention rule** (`target/.cursor/rules/codeguard-py-cwe-346.mdc`):
 A markdown rule that instructs AI coding assistants to never trust proxy headers
 without validation, provides secure patterns for proxy trust configuration, and
 includes an implementation checklist for developers.
@@ -201,8 +210,8 @@ python -m foundry_poc.cli --config config-mlflow.yaml synthesize --cwe CWE-129  
 
 | Gap | Source | Tokens | Time | CodeGuard rule | Foundry rule |
 |---|---|---|---|---|---|
-| CWE-346 (proxy-header trust) | Langflow `get_client_ip` | ~28K | ~82s | [examples/synthesized/langflow-codeguard-py-cwe-346.md](../examples/synthesized/langflow-codeguard-py-cwe-346.md) | [rules/py-cwe-346.yaml](../rules/py-cwe-346.yaml) |
-| CWE-129 (unchecked split index) | MLflow `_extract_run_id` | ~29K | ~93s | [examples/synthesized/mlflow-codeguard-py-cwe-129.md](../examples/synthesized/mlflow-codeguard-py-cwe-129.md) | [rules/py-cwe-129.yaml](../rules/py-cwe-129.yaml) |
+| CWE-346 (proxy-header trust) | Langflow `get_client_ip` | ~28K | ~82s | [examples/synthesized/langflow-codeguard-py-cwe-346.mdc](../examples/synthesized/langflow-codeguard-py-cwe-346.mdc) | [rules/py-cwe-346.yaml](../rules/py-cwe-346.yaml) |
+| CWE-129 (unchecked split index) | MLflow `_extract_run_id` | ~29K | ~93s | [examples/synthesized/mlflow-codeguard-py-cwe-129.mdc](../examples/synthesized/mlflow-codeguard-py-cwe-129.mdc) | [rules/py-cwe-129.yaml](../rules/py-cwe-129.yaml) |
 
 Each synthesis costs roughly 1-2% of the evaluation that discovered the gap (the
 Langflow sweep was ~2M tokens). The Foundry corpus grew from 13 to 15 rules; the

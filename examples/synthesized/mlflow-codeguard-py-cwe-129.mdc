@@ -1,5 +1,7 @@
+---
 description: Validate array bounds before indexing split/parsed sequences from user-controlled input
 globs: **/*.py,**/*.pyi
+alwaysApply: false
 version: 1.0.0
 ---
 

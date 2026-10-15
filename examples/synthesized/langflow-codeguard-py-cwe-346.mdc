@@ -1,5 +1,7 @@
+---
 description: Prevent IP spoofing via untrusted proxy headers (CWE-346)
 globs: **/*.py,**/*.pyi
+alwaysApply: false
 version: 1.0.0
 ---
 
