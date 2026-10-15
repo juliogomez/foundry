@@ -1,0 +1,1408 @@
+{
+  "run_id": "run_669a3689d714",
+  "meta": {
+    "target": "pygoat",
+    "pinned_ref": "master",
+    "model": "claude-sonnet-4-6",
+    "backend": "cursor",
+    "units_analyzed": 180,
+    "candidates": 47,
+    "total_tokens": 420358,
+    "max_tokens": 2000000,
+    "stop_reason": "coverage-complete (all 180 units); trailing true-positive yield=0.92"
+  },
+  "budget": {
+    "calls": 11,
+    "input_tokens": 199937,
+    "output_tokens": 20517,
+    "total_tokens": 420358,
+    "max_tokens": 2000000,
+    "exhausted": false
+  },
+  "raw_candidate_count": 47,
+  "reported_findings": [
+    {
+      "file": "introduction/views.py",
+      "line": 538,
+      "class": "CWE-798",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_08e98ddfdddf0ad7",
+      "symbol": "secret",
+      "title": "Hardcoded secret value in source code",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 538,
+          "quote": "return render(request,\"Lab/sec_mis/sec_mis_lab.html\", {\"secret\": \"S3CR37K3Y\"})",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 864,
+      "class": "CWE-209",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_099806186aa50557",
+      "symbol": "injection_sql_lab",
+      "title": "SQL query structure leaked to client on error",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 864,
+          "quote": "sql_query = \"SELECT * FROM introduction_sql_lab_table WHERE id='\"+name+\"'AND password='\"+password+\"'\"",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 888,
+          "quote": "\"sql_error\":sql_query",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/apis.py",
+      "line": 61,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_0a48516757799842",
+      "symbol": "log_function_checker",
+      "title": "Unauthenticated write to server-side Python source files",
+      "evidence": [
+        {
+          "file": "introduction/apis.py",
+          "line": 61,
+          "quote": "def log_function_checker(request):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/apis.py",
+          "line": 62,
+          "quote": "if request.method == 'POST':",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/apis.py",
+          "line": 70,
+          "quote": "f.write(log_code)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/apis.py",
+          "line": 73,
+          "quote": "f.write(api_code)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 766,
+      "class": "CWE-798",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_13227cecd44ceffd",
+      "symbol": "a1_broken_access_lab_1",
+      "title": "Hardcoded plaintext credentials used for authentication",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 766,
+          "quote": "elif (name=='jack' and password=='jacktheripper'): # Will implement hashing here",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 1026,
+      "class": "CWE-327",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_153f0436e465382e",
+      "symbol": "crypto_failure_lab",
+      "title": "MD5 used for password hashing \u2014 cryptographically broken",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 1026,
+          "quote": "password = md5(password.encode()).hexdigest()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 1027,
+          "quote": "user = CF_user.objects.filter(username=username,password=password).first()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/mitre.py",
+      "line": 169,
+      "class": "CWE-798",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_20351de87381b0bb",
+      "symbol": "csrf_lab_login",
+      "title": "Hardcoded JWT signing secret in csrf_lab_login",
+      "evidence": [
+        {
+          "file": "introduction/mitre.py",
+          "line": 169,
+          "quote": "cookie = jwt.encode(payload, 'csrf_vulneribility', algorithm='HS256')",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 150,
+      "class": "CWE-89",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_261ef672e9351bd1",
+      "symbol": "sql_lab",
+      "title": "SQL injection via string concatenation of name and password into raw query",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 150,
+          "quote": "name=request.POST.get('name')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 152,
+          "quote": "password=request.POST.get('pass')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 158,
+          "quote": "sql_query = \"SELECT * FROM introduction_login WHERE user='\"+name+\"' AND password='\"+password+\"'\"",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 162,
+          "quote": "val=login.objects.raw(sql_query)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/mitre.py",
+      "line": 233,
+      "class": "CWE-78",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_2a867ca3879174fc",
+      "symbol": "command_out",
+      "title": "Helper executes arbitrary shell command with shell=True",
+      "evidence": [
+        {
+          "file": "introduction/mitre.py",
+          "line": 233,
+          "quote": "process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 1003,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_2e8effe4cedc6482",
+      "symbol": "ssti_lab",
+      "title": "Path traversal via blog_id URL parameter used directly as template path",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 1003,
+          "quote": "def ssti_view_blog(request,blog_id):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 1006,
+          "quote": "return render(request,f\"Lab_2021/A3_Injection/Blogs/{blog_id}.html\")",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 456,
+      "class": "CWE-94",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_3aac87bc7ebe32dd",
+      "symbol": "cmd_lab2",
+      "title": "Unsandboxed eval() on user-supplied POST parameter 'val'",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 456,
+          "quote": "val=request.POST.get('val')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 460,
+          "quote": "output = eval(val)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "challenge/views.py",
+      "line": 80,
+      "class": "CWE-78",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_3c784dab67d8bb55",
+      "symbol": "DoItFast.delete",
+      "title": "Potential argument injection via stored container_id in docker stop command",
+      "evidence": [
+        {
+          "file": "challenge/views.py",
+          "line": 80,
+          "quote": "command = f\"docker stop {user_chal.container_id}\"",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "challenge/views.py",
+          "line": 81,
+          "quote": "process = subprocess.Popen(command.split(\" \"), stdout=subprocess.PIPE)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 961,
+      "class": "CWE-918",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_529991d5861cbc7b",
+      "symbol": "ssrf_lab2",
+      "title": "SSRF via unsanitized user-controlled URL passed to requests.get()",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 961,
+          "quote": "url = request.POST[\"url\"]",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 963,
+          "quote": "response = requests.get(url)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/mitre.py",
+      "line": 240,
+      "class": "CWE-78",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_7c7254bc3aef7266",
+      "symbol": "mitre_lab_17_api",
+      "title": "OS command injection via unsanitized POST 'ip' in nmap command",
+      "evidence": [
+        {
+          "file": "introduction/mitre.py",
+          "line": 240,
+          "quote": "ip = request.POST.get('ip')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 241,
+          "quote": "command = \"nmap \" + ip",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 242,
+          "quote": "res, err = command_out(command)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 233,
+          "quote": "process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 256,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_7de0c25b539df12d",
+      "symbol": "xxe_parse",
+      "title": "Missing authentication on XXE-vulnerable XML endpoint",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 256,
+          "quote": "def xxe_parse(request):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 259,
+          "quote": "parser.setFeature(feature_external_ges, True)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 268,
+          "quote": "p=comments.objects.filter(id=1).update(comment=text)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/mitre.py",
+      "line": 194,
+      "class": "CWE-798",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_7f9af2f39d5c4305",
+      "symbol": "csrf_transfer_monei_api",
+      "title": "Hardcoded JWT verification secret in csrf_transfer_monei_api",
+      "evidence": [
+        {
+          "file": "introduction/mitre.py",
+          "line": 194,
+          "quote": "payload = jwt.decode(cookie, 'csrf_vulneribility', algorithms=['HS256'])",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 204,
+          "quote": "recipent.balance = recipent.balance + int(amount)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/apis.py",
+      "line": 67,
+      "class": "CWE-22",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_8019bc9604150ac4",
+      "symbol": "log_function_checker",
+      "title": "No path traversal \u2014 destination paths are fully hardcoded",
+      "evidence": [
+        {
+          "file": "introduction/apis.py",
+          "line": 67,
+          "quote": "log_filename = os.path.join(dirname, \"playground/A9/main.py\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/apis.py",
+          "line": 68,
+          "quote": "api_filename = os.path.join(dirname, \"playground/A9/api.py\")",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "dockerized_labs/broken_auth_lab/app.py",
+      "line": 86,
+      "class": "CWE-327",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_8036ca6a4c0d5067",
+      "symbol": "reset_password",
+      "title": "MD5 used for password reset token generation (weak cryptography)",
+      "evidence": [
+        {
+          "file": "dockerized_labs/broken_auth_lab/app.py",
+          "line": 86,
+          "quote": "token = hashlib.md5(f\"{email}:{datetime.now()}\".encode()).hexdigest()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "dockerized_labs/broken_auth_lab/app.py",
+          "line": 91,
+          "quote": "flash(f'Password reset link: /reset/{token}')",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/playground/ssrf/main.py",
+      "line": 4,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_8318b73ef828d274",
+      "symbol": "ssrf_lab",
+      "title": "Path traversal in ssrf_lab via caller-supplied 'file' parameter",
+      "evidence": [
+        {
+          "file": "introduction/playground/ssrf/main.py",
+          "line": 4,
+          "quote": "def ssrf_lab(file):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/playground/ssrf/main.py",
+          "line": 7,
+          "quote": "filename = os.path.join(dirname, file)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/playground/ssrf/main.py",
+          "line": 8,
+          "quote": "file = open(filename,\"r\")",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 1003,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_8eb212bb696691c4",
+      "symbol": "ssti_view_blog",
+      "title": "Potential template-path traversal via unsanitized blog_id URL parameter",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 1003,
+          "quote": "def ssti_view_blog(request,blog_id):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 1006,
+          "quote": "return render(request,f\"Lab_2021/A3_Injection/Blogs/{blog_id}.html\")",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 158,
+      "class": "CWE-209",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_95c7cbe66934bbf2",
+      "symbol": "sql_lab",
+      "title": "Full SQL query including user-controlled values returned to client on error",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 158,
+          "quote": "sql_query = \"SELECT * FROM introduction_login WHERE user='\"+name+\"' AND password='\"+password+\"'\"",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 170,
+          "quote": "\"sql_error\":sql_query",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 182,
+          "quote": "\"sql_error\":sql_query",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/apis.py",
+      "line": 130,
+      "class": "CWE-94",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_961ecc085843a429",
+      "symbol": "A6_disscussion_api_2",
+      "title": "Arbitrary code injection via write of POST body to .py source file",
+      "evidence": [
+        {
+          "file": "introduction/apis.py",
+          "line": 130,
+          "quote": "code = request.POST.get('code')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/apis.py",
+          "line": 133,
+          "quote": "f = open(filename,\"w\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/apis.py",
+          "line": 134,
+          "quote": "f.write(code)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+      "line": 113,
+      "class": "CWE-862",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_96c485caa6a4013b",
+      "symbol": "all_users_data_view",
+      "title": "Missing authentication/authorization on all-users data endpoint",
+      "evidence": [
+        {
+          "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+          "line": 113,
+          "quote": "# MAJOR SECURITY FLAW: This endpoint allows ANY user (even unauthenticated ones!)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+          "line": 129,
+          "quote": "# if not request.user.is_authenticated or not request.user.is_staff:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+          "line": 132,
+          "quote": "return JsonResponse({'users': all_users_data})",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+      "line": 103,
+      "class": "CWE-312",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_9b6507ea3c022ff6",
+      "symbol": "api_data_view",
+      "title": "Plaintext sensitive data (credit card, SSN, API key) returned in API response",
+      "evidence": [
+        {
+          "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+          "line": 103,
+          "quote": "'credit_card': user_data.credit_card,",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+          "line": 104,
+          "quote": "'ssn': user_data.ssn,",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+          "line": 105,
+          "quote": "'api_key': user_data.api_key",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 858,
+      "class": "CWE-89",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_a15f675062374add",
+      "symbol": "injection_sql_lab",
+      "title": "SQL Injection via unsanitized POST parameters in raw query",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 858,
+          "quote": "name=request.POST.get('name')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 859,
+          "quote": "password=request.POST.get('pass')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 864,
+          "quote": "sql_query = \"SELECT * FROM introduction_sql_lab_table WHERE id='\"+name+\"'AND password='\"+password+\"'\"",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 878,
+          "quote": "user = sql_lab_table.objects.raw(sql_query)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/playground/A9/api.py",
+      "line": 15,
+      "class": "CWE-312",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_a245c3bd049690b1",
+      "symbol": "log_function_target",
+      "title": "Plaintext password written to log via info-level log message",
+      "evidence": [
+        {
+          "file": "introduction/playground/A9/api.py",
+          "line": 15,
+          "quote": "password = request.POST['password']",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/playground/A9/api.py",
+          "line": 16,
+          "quote": "L.info(f\"POST request with username {username} and password {password}\")",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "challenge/views.py",
+      "line": 33,
+      "class": "CWE-78",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_ad5215ed2a378542",
+      "symbol": "DoItFast.post",
+      "title": "Argument injection via docker_image/docker_port in subprocess.Popen",
+      "evidence": [
+        {
+          "file": "challenge/views.py",
+          "line": 33,
+          "quote": "chal = Challenge.objects.get(name=challenge)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "challenge/views.py",
+          "line": 49,
+          "quote": "command = f\"docker run -d -p {port}:{chal.docker_port} {chal.docker_image}\"",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "challenge/views.py",
+          "line": 50,
+          "quote": "process = subprocess.Popen(command.split(\" \"), stdout=subprocess.PIPE)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "dockerized_labs/insec_des_lab/main.py",
+      "line": 33,
+      "class": "CWE-502",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_b4ca54e54a531181",
+      "symbol": "deserialize_data",
+      "title": "Unsafe pickle deserialization of attacker-controlled form data (RCE)",
+      "evidence": [
+        {
+          "file": "dockerized_labs/insec_des_lab/main.py",
+          "line": 33,
+          "quote": "serialized_data = request.form.get('serialized_data', '')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "dockerized_labs/insec_des_lab/main.py",
+          "line": 34,
+          "quote": "decoded_data = base64.b64decode(serialized_data)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "dockerized_labs/insec_des_lab/main.py",
+          "line": 36,
+          "quote": "user = pickle.loads(decoded_data)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/mitre.py",
+      "line": 159,
+      "class": "CWE-327",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_b69abfcd12429bd6",
+      "symbol": "csrf_lab_login",
+      "title": "MD5 used for password hashing in authentication path",
+      "evidence": [
+        {
+          "file": "introduction/mitre.py",
+          "line": 159,
+          "quote": "password = request.POST.get('password')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 161,
+          "quote": "password = md5(password.encode()).hexdigest()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 162,
+          "quote": "User = CSRF_user_tbl.objects.filter(username=username, password=password)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 418,
+      "class": "CWE-78",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_b77769a7adf83016",
+      "symbol": "cmd_lab",
+      "title": "OS command injection via domain POST parameter in shell command",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 418,
+          "quote": "domain=request.POST.get('domain')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 420,
+          "quote": "domain = re.sub(r'^(?:(https?|ftp)://)?(?:www\\.)?', '', domain, flags=re.IGNORECASE)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 424,
+          "quote": "command=\"nslookup {}\".format(domain)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 426,
+          "quote": "command = \"dig {}\".format(domain)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 432,
+          "quote": "shell=True,",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/mitre.py",
+      "line": 215,
+      "class": "CWE-862",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_c52150ca1bcf8be4",
+      "symbol": "mitre_lab_25_api",
+      "title": "Missing authentication on eval() endpoint mitre_lab_25_api",
+      "evidence": [
+        {
+          "file": "introduction/mitre.py",
+          "line": 215,
+          "quote": "def mitre_lab_25_api(request):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 217,
+          "quote": "expression = request.POST.get('expression')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 218,
+          "quote": "result = eval(expression)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/apis.py",
+      "line": 126,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_c5d46757434f023c",
+      "symbol": "A6_disscussion_api_2",
+      "title": "Unauthenticated overwrite of server-side Python source file",
+      "evidence": [
+        {
+          "file": "introduction/apis.py",
+          "line": 126,
+          "quote": "def A6_disscussion_api_2(request):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/apis.py",
+          "line": 130,
+          "quote": "code = request.POST.get('code')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/apis.py",
+          "line": 133,
+          "quote": "f = open(filename,\"w\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/apis.py",
+          "line": 134,
+          "quote": "f.write(code)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 352,
+      "class": "CWE-798",
+      "severity": "low",
+      "verdict": "true-positive",
+      "fingerprint": "fp_c872018e45e0f6d4",
+      "symbol": "ba_lab",
+      "title": "Hardcoded secret value in response context",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 352,
+          "quote": "\"data\":\"0NLY_F0R_4DM1N5\",",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 789,
+      "class": "CWE-798",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_caaf6f79c06aca30",
+      "symbol": "a1_broken_access_lab_2",
+      "title": "Hardcoded plaintext credentials used for authentication",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 789,
+          "quote": "name = request.POST.get('name')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 790,
+          "quote": "password = request.POST.get('pass')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 806,
+          "quote": "elif ( name=='jack' and password=='jacktheripper'): # Will implement hashing here",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 216,
+      "class": "CWE-798",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_cf8ecd748cbb3f7e",
+      "symbol": "insec_des_lab",
+      "title": "Hardcoded secret key returned in HTTP response",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 216,
+          "quote": "response = render(request,'Lab/insec_des/insec_des_lab.html', {\"message\":\"Welcome Admin, SECRETKEY:ADMIN123\"})",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/mitre.py",
+      "line": 238,
+      "class": "CWE-862",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_d1d235186210ca52",
+      "symbol": "mitre_lab_17_api",
+      "title": "Missing authentication on mitre_lab_17_api exposes shell injection to unauthenticated callers",
+      "evidence": [
+        {
+          "file": "introduction/mitre.py",
+          "line": 238,
+          "quote": "def mitre_lab_17_api(request):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 240,
+          "quote": "ip = request.POST.get('ip')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 241,
+          "quote": "command = \"nmap \" + ip",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 208,
+      "class": "CWE-502",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_d24a222be6e31b71",
+      "symbol": "insec_des_lab",
+      "title": "Unsafe pickle deserialization of attacker-controlled cookie",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 208,
+          "quote": "token = request.COOKIES.get('token')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 213,
+          "quote": "token = base64.b64decode(token)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 214,
+          "quote": "admin = pickle.loads(token)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 831,
+      "class": "CWE-798",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_d4438b154c9bfa50",
+      "symbol": "a1_broken_access_lab_3",
+      "title": "Hardcoded plaintext credentials for both user and admin accounts",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 831,
+          "quote": "if username == 'John' and password == 'reaper':",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 833,
+          "quote": "elif username == 'admin' and password == 'admin_pass':",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 583,
+      "class": "CWE-94",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_d9ab80320100c951",
+      "symbol": "a9_lab2",
+      "title": "Code injection via user-supplied expression in ImageMath.eval()",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 583,
+          "quote": "function_str = request.POST.get(\"function\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 588,
+          "quote": "output = ImageMath.eval(function_str,img = img, b=b, r=r, g=g)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/utility.py",
+      "line": 34,
+      "class": "CWE-22",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_dce6e2b9162f8cc5",
+      "symbol": "ssrf_code_converter",
+      "title": "Path traversal rule does not apply \u2014 write destination is a hardcoded path",
+      "evidence": [
+        {
+          "file": "introduction/utility.py",
+          "line": 34,
+          "quote": "filename = os.path.join(dirname, \"playground/ssrf/main.py\")",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/playground/A9/archive.py",
+      "line": 15,
+      "class": "CWE-312",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_de6df0e22c044475",
+      "symbol": "log_function_target",
+      "title": "Plaintext password written to log in archive.py \u2014 same defect as api.py",
+      "evidence": [
+        {
+          "file": "introduction/playground/A9/archive.py",
+          "line": 15,
+          "quote": "password = request.POST['password']",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/playground/A9/archive.py",
+          "line": 16,
+          "quote": "L.info(f\"POST request with username {username} and password {password}\")",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 838,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_df48e073307df12a",
+      "symbol": "a1_broken_access_lab3_secret",
+      "title": "Missing authorization: any authenticated user can access admin secret page",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 838,
+          "quote": "if not request.user.is_authenticated:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 840,
+          "quote": "# no checking applied here",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 841,
+          "quote": "return render(request, 'Lab_2021/A1_BrokenAccessControl/secret.html')",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/mitre.py",
+      "line": 217,
+      "class": "CWE-94",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_e64d969c73a03b0a",
+      "symbol": "mitre_lab_25_api",
+      "title": "Unsandboxed eval() on user-supplied POST parameter",
+      "evidence": [
+        {
+          "file": "introduction/mitre.py",
+          "line": 217,
+          "quote": "expression = request.POST.get('expression')",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 218,
+          "quote": "result = eval(expression)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/mitre.py",
+      "line": 193,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e744f8a4a6ccaa7b",
+      "symbol": "csrf_transfer_monei_api",
+      "title": "Weak authentication \u2014 hardcoded JWT secret allows token forgery for financial operation",
+      "evidence": [
+        {
+          "file": "introduction/mitre.py",
+          "line": 193,
+          "quote": "cookie = request.COOKIES['auth_cookiee']",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 194,
+          "quote": "payload = jwt.decode(cookie, 'csrf_vulneribility', algorithms=['HS256'])",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/mitre.py",
+          "line": 204,
+          "quote": "recipent.balance = recipent.balance + int(amount)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 558,
+      "class": "CWE-502",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_f4bc240ea7584248",
+      "symbol": "a9_lab",
+      "title": "Unsafe YAML deserialization with full yaml.Loader on uploaded file",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 558,
+          "quote": "file=request.FILES[\"file\"]",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 560,
+          "quote": "data = yaml.load(file,yaml.Loader)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+      "line": 123,
+      "class": "CWE-312",
+      "severity": "critical",
+      "verdict": "true-positive",
+      "fingerprint": "fp_f5238a2711d206e4",
+      "symbol": "all_users_data_view",
+      "title": "All users' unmasked PII and secrets exposed in unauthenticated JSON response",
+      "evidence": [
+        {
+          "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+          "line": 123,
+          "quote": "'credit_card': user_data.credit_card,  # Completely exposed! No masking!",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+          "line": 124,
+          "quote": "'ssn': user_data.ssn,  # Sending full SSN - terrible practice!",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "dockerized_labs/sensitive_data_exposure/dataexposure/views.py",
+          "line": 125,
+          "quote": "'api_key': user_data.api_key  # API keys should never be exposed like this",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/mitre.py",
+      "line": 182,
+      "class": "CWE-798",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_f6e1e8d5a60fdf8d",
+      "symbol": "csrf_transfer_monei",
+      "title": "Hardcoded JWT verification secret in csrf_transfer_monei",
+      "evidence": [
+        {
+          "file": "introduction/mitre.py",
+          "line": 182,
+          "quote": "payload = jwt.decode(cookie, 'csrf_vulneribility', algorithms=['HS256'])",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "introduction/views.py",
+      "line": 923,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_f82e4684c8dcceaf",
+      "symbol": "ssrf_lab",
+      "title": "Path traversal via unsanitized POST field used in os.path.join + open()",
+      "evidence": [
+        {
+          "file": "introduction/views.py",
+          "line": 923,
+          "quote": "file=request.POST[\"blog\"]",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 925,
+          "quote": "dirname = os.path.dirname(__file__)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 926,
+          "quote": "filename = os.path.join(dirname, file)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "introduction/views.py",
+          "line": 927,
+          "quote": "file = open(filename,\"r\")",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    }
+  ]
+}

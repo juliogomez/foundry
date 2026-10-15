@@ -1,0 +1,62 @@
+# Foundry PoC — MLflow full-scope sweep.
+#
+# Scope: the MLflow server handler layer, artifact storage layer, tracking
+# store, auth layer, and key file/URI utilities — the primary server-side
+# attack surface. Excludes DB migrations, tests, and ML framework integrations.
+
+system:
+  name: "foundry-poc-mlflow"
+
+target:
+  path: "targets/mlflow"
+  include_globs:
+    - "mlflow/server/*.py"
+    - "mlflow/server/auth/*.py"
+    - "mlflow/store/artifact/*.py"
+    - "mlflow/store/tracking/*.py"
+    - "mlflow/utils/file_utils.py"
+    - "mlflow/utils/uri.py"
+    - "mlflow/utils/rest_utils.py"
+    - "mlflow/utils/data_utils.py"
+  exclude_globs:
+    - "**/tests/**"
+    - "**/__pycache__/**"
+    - "**/db/migrations/**"
+    - "**/dbmodels/**"
+  pinned_ref: "v2.9.0"
+
+goals: |
+  Evaluate the target for server-side security defects reachable from external
+  input across the MLflow server and artifact storage surface: path traversal,
+  code/command injection, SQL injection, SSRF, unsafe deserialization, hardcoded
+  secrets, missing authz, IDOR, header injection, error-info leakage, and
+  sensitive-data exposure.
+  In scope: server handlers, artifact repos, tracking store, auth, file/URI utils.
+  Out of scope: ML framework integrations, frontend, tests, dependencies.
+
+llm:
+  backend: "cursor"
+  model: "claude-sonnet-4-6"
+  scratch_cwd: ".scratch"
+
+batching:
+  detector_max_units: 25
+  detector_max_lines: 1200
+  triage_batch_size: 20
+
+budget:
+  max_tokens: 6000000
+  yield_window: 12
+  yield_min_true_positive_rate: 0.05
+
+severity:
+  scheme: "low_medium_high_critical"
+
+rules:
+  corpus_dir: "rules"
+
+store:
+  db_path: "out-mlflow/findings.db"
+  provenance_log: "out-mlflow/provenance.jsonl"
+  reports_dir: "out-mlflow/findings"
+  rule_gaps_log: "out-mlflow/rule-gaps.jsonl"

@@ -4,10 +4,17 @@ This document is like the registration of the experiment before doing it. I writ
 it to be read *before* looking at [RESULTS.md](RESULTS.md), so you can judge if the
 design is fair in an independent way from what it produced.
 
+**Scope of this document.** The controlled Foundry-vs-baseline experiment described
+here uses Langflow as the target. Additional targets (MLflow for scale validation,
+PyGoat for the Antares integration demo) are covered in
+[RESULTS.md](RESULTS.md) but are not part of the pre-registered controlled
+experiment — they demonstrate different properties (scale portability and
+the Antares localization integration, respectively).
+
 ## Subjects
 
 - **Target:** [Langflow](https://github.com/langflow-ai/langflow), fixed in the tag
-  `1.7.3`, downloaded (never copied inside) by `scripts/fetch_target.sh`.
+  `1.7.3`, downloaded (never copied inside) by `scripts/fetch_target.sh langflow`.
 - **Scope:** the **entire Langflow v1 API layer** - all 25 HTTP
   request-handler modules where external input crosses a trust boundary - plus the
   one helper module with a real `compile()`/`exec()` sink. That is **289

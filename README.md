@@ -2,8 +2,10 @@
 
 This repo is a proof of concept. It implements the
 [Foundry security harness specification](https://github.com/CiscoDevNet/foundry-security-spec)
-and uses it to run a controlled experiment against a real, complex code base:
-[Langflow](https://github.com/langflow-ai/langflow).
+and demonstrates it against multiple real targets:
+[Langflow](https://github.com/langflow-ai/langflow) (governance thesis),
+[MLflow](https://github.com/mlflow/mlflow) (scale validation), and
+[PyGoat](https://github.com/adeyosemanputra/pygoat) (Antares integration demo).
 
 ## What Foundry is
 
@@ -55,16 +57,42 @@ is already in operation.
 
 Deep dive: **[CODEGUARD.md](docs/CODEGUARD.md)** and **[LOCALIZER.md](docs/LOCALIZER.md)**.
 
-## The demonstration
+## The demonstrations
 
-The PoC evaluates the **entire Langflow v1 API surface** (289 function-level units,
-25 modules). Foundry surfaces roughly **2x the confirmed findings** of a fair
-baseline agent (same model, same code, disciplined prompt) at ~10x the token cost.
-Two runs collapse to the same distinct fingerprints instead of producing two
-unrelated walls of text. The difference is not insight; it is governance.
+**Governance thesis (Langflow).** The PoC evaluates the **entire Langflow v1 API
+surface** (289 function-level units, 25 modules). Foundry surfaces roughly **2x the
+confirmed findings** of a fair baseline agent (same model, same code, disciplined
+prompt) at ~10x the token cost. Two runs collapse to the same distinct fingerprints
+instead of producing two unrelated walls of text. The difference is not insight; it
+is governance.
+
+**Second codebase (MLflow).** To check that Foundry isn't tailored to Langflow, we
+ran it on MLflow v2.9.0, a different and larger project (830 functions, about 3x
+Langflow's 289). We only changed the config file to point to the new repo, but the engine code stayed the same. The evidence gate, the declared stop under the token cap, and the per-finding
+audit trail all behaved the same way.
+
+**Antares integration (PyGoat).** The end-to-end proof of Antares + Foundry
+_localize_: Antares identifies the file affected by CWE-78 (shell injection) in
+22 seconds at zero cost (local model). Foundry then runs all 13 rules on the
+narrowed scope, finding 23 true-positives — including the targeted CWE-78 plus
+adjacent weaknesses in the same area — using 30% fewer tokens than a full sweep.
 
 Numbers and methodology: **[RESULTS.md](docs/RESULTS.md)** and
 **[METHODOLOGY.md](docs/METHODOLOGY.md)**.
+
+## Documentation
+
+| Doc | What it covers |
+|-----|----------------|
+| [VALUE.md](docs/VALUE.md) | The full governance thesis, the six properties, and the flywheel |
+| [METHODOLOGY.md](docs/METHODOLOGY.md) | Experiment design, the fair baseline, pre-registered metrics |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | How Foundry roles map to the code |
+| [CUSTOMIZATION.md](docs/CUSTOMIZATION.md) | How `config.yaml` and `rules/` are your customized spec |
+| [WALKTHROUGH.md](docs/WALKTHROUGH.md) | Step-by-step run instructions |
+| [RESULTS.md](docs/RESULTS.md) | Numbers from the real runs (Langflow, MLflow, PyGoat) |
+| [BUILD-YOUR-OWN.md](docs/BUILD-YOUR-OWN.md) | Take it to your own repo |
+| [LOCALIZER.md](docs/LOCALIZER.md) | Antares integration for advisory-driven scope |
+| [CODEGUARD.md](docs/CODEGUARD.md) | CodeGuard integration for prevention-at-the-keystroke |
 
 ## Quickstart
 
@@ -74,7 +102,8 @@ git clone https://github.com/juliogomez/foundry.git && cd foundry
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-bash scripts/fetch_target.sh
+# Fetch targets (all, or specify one: langflow, mlflow, pygoat, etc.)
+bash scripts/fetch_target.sh langflow
 
 # Offline smoke test (no key, no spend)
 FOUNDRY_LLM=mock python -m foundry_poc.cli run --limit 10
@@ -88,21 +117,11 @@ python -m foundry_poc.cli score --foundry out/foundry-<run>.json \
 
 # Close the flywheel: generate CodeGuard prevention rules from detected gaps
 python -m foundry_poc.cli synthesize
+
+# Antares integration demo (requires Antares CLI + mlx-lm server)
+bash scripts/fetch_target.sh pygoat
+python -m foundry_poc.cli --config config-pygoat.yaml localize --cwe CWE-78
 ```
-
-## Documentation
-
-| Doc | What it covers |
-|-----|----------------|
-| [VALUE.md](docs/VALUE.md) | The full governance thesis, the six properties, and the flywheel |
-| [METHODOLOGY.md](docs/METHODOLOGY.md) | Experiment design, the fair baseline, pre-registered metrics |
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | How Foundry roles map to the code |
-| [CUSTOMIZATION.md](docs/CUSTOMIZATION.md) | How `config.yaml` and `rules/` are your customized spec |
-| [WALKTHROUGH.md](docs/WALKTHROUGH.md) | Step-by-step run instructions |
-| [RESULTS.md](docs/RESULTS.md) | Numbers from the real run |
-| [BUILD-YOUR-OWN.md](docs/BUILD-YOUR-OWN.md) | Take it to your own repo |
-| [LOCALIZER.md](docs/LOCALIZER.md) | Antares integration for advisory-driven scope |
-| [CODEGUARD.md](docs/CODEGUARD.md) | CodeGuard integration for prevention-at-the-keystroke |
 
 ## What is inside the repo
 
@@ -110,18 +129,20 @@ python -m foundry_poc.cli synthesize
 |------|------------|
 | `foundry_poc/` | Implementation of the Foundry roles (Indexer, Detector, Triager, Reporter, Orchestrator) plus store, provenance, budget, and evidence gate. |
 | `rules/` | CodeGuard detection rules (YAML patterns the LLM evaluates). |
-| `config.yaml` | The customized spec for the wide run (289 units). See [CUSTOMIZATION.md](docs/CUSTOMIZATION.md). |
-| `config-narrow.yaml` | A 12-module scale contrast (107 units). |
-| `config-localize-example.yaml` | Antares-localized runs. See [LOCALIZER.md](docs/LOCALIZER.md). |
-| `scripts/fetch_target.sh` | Downloads Langflow at a pinned revision. |
+| `config.yaml` | The customized spec for the wide Langflow run (289 units). See [CUSTOMIZATION.md](docs/CUSTOMIZATION.md). |
+| `config-narrow.yaml` | A 12-module Langflow scale contrast (107 units). |
+| `config-mlflow.yaml` | Full-scope MLflow v2.9.0 (830 units). |
+| `config-pygoat.yaml` | PyGoat (OWASP) for the Antares integration demo (180 units). |
+| `config-localize-example.yaml` | Antares-localized runs template. See [LOCALIZER.md](docs/LOCALIZER.md). |
+| `scripts/fetch_target.sh` | Downloads evaluation targets at pinned revisions (Langflow, MLflow, PyGoat, and others). |
 | `docs/` | All documentation (see table above). |
-| `out/` | Generated artifacts: findings, provenance, rule-gaps, comparisons. |
+| `out/`, `out-mlflow/`, `out-pygoat/` | Generated artifacts: findings, provenance, rule-gaps, comparisons (per target). |
 
 ## The backend
 
-LLM calls go through the **Cursor SDK** (`cursor-sdk`) using your Cursor plan. You
-authenticate with a `CURSOR_API_KEY` from Cursor Dashboard. No secrets are written to
-disk. Without a key, everything works in `FOUNDRY_LLM=mock` mode for offline
+LLM calls go through the **Cursor SDK** using your Cursor plan. You
+authenticate with a CURSOR_API_KEY from Cursor Dashboard. No secrets are written to
+disk. Without a key, everything works in "FOUNDRY_LLM=mock" mode for offline
 validation.
 
 ## A note about honesty

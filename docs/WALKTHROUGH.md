@@ -2,7 +2,8 @@
 
 This is a tutorial that you can follow end to end. At the end you will have run the
 Foundry pipeline and the fair baseline against Langflow, and produced the comparison
-table by yourself.
+table by yourself. (For the Antares integration demo on PyGoat, see
+[LOCALIZER.md](LOCALIZER.md).)
 
 Everything lives in a local `.venv/`. If you delete the repo folder, nothing stays on
 your machine.
@@ -13,8 +14,8 @@ The [Foundry spec](https://github.com/CiscoDevNet/foundry-security-spec) is a
 *design* - a constitution plus a `spec.md` with ~130 requirements and about three
 dozen `[NEEDS CLARIFICATION: ...]` decisions it deliberately leaves to you. It has
 **no code**. This repo is **one worked implementation**: the design with those
-decisions resolved for a concrete case (evaluate Langflow, using a Cursor-hosted
-model). Two ways to use it:
+decisions resolved for concrete cases (Langflow, MLflow, PyGoat, using a
+Cursor-hosted model). Two ways to use it:
 
 - **Reproduce this exercise** (what this walkthrough does): clone this repo and run
   the steps below against Langflow.
@@ -52,12 +53,14 @@ pip install -r requirements.txt
 ## 2. Download the target
 
 ```bash
-bash scripts/fetch_target.sh
+bash scripts/fetch_target.sh langflow
 ```
 
-This does a shallow clone of Langflow in the tag `1.7.3` into `targets/` (it is
-ignored by git, never committed) and it verifies that the `compile()`/`exec()` sink
-is present in that revision.
+This does a shallow clone of Langflow at tag `1.7.3` into `targets/langflow/` (it
+is ignored by git, never committed) and verifies that the `compile()`/`exec()` sink
+is present at that revision. The script supports multiple targets (run
+`bash scripts/fetch_target.sh` with no arguments to fetch all of them, or name
+specific ones like `langflow`, `mlflow`, `pygoat`).
 
 ## 3. Check it works
 
@@ -167,3 +170,17 @@ Open `out/provenance.jsonl`. Every line is one event, a detector call, a triage
 verdict with its gate bookkeeping, a finding upsert. Pick any finding of the report
 and trace it back to the exact calls that produce it. This capacity to rebuild the
 history is one of the metrics that the baseline can not satisfy in a structural way.
+
+## Beyond Langflow
+
+This walkthrough covers the governance thesis (Foundry vs. baseline) on Langflow.
+The repo also demonstrates:
+
+- **MLflow** (`config-mlflow.yaml`): scale validation at 830 units, confirming the
+  governance properties hold at ~3x the scope. See
+  [RESULTS.md](RESULTS.md#second-target-mlflow).
+- **PyGoat** (`config-pygoat.yaml`): the end-to-end Antares + Foundry integration
+  demo, proving the loop works (Antares locates, Foundry verifies) on an
+  appropriately-sized target. See
+  [LOCALIZER.md](LOCALIZER.md#basic-localized-run-pygoat) and
+  [RESULTS.md](RESULTS.md#pygoat-antares--foundry-integration-demo-the-proof).

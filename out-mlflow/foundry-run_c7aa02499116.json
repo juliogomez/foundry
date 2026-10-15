@@ -1,0 +1,3375 @@
+{
+  "run_id": "run_c7aa02499116",
+  "meta": {
+    "target": "mlflow",
+    "pinned_ref": "v2.9.0",
+    "model": "claude-sonnet-4-6",
+    "backend": "cursor",
+    "units_analyzed": 830,
+    "candidates": 136,
+    "total_tokens": 4816743,
+    "max_tokens": 6000000,
+    "stop_reason": "coverage-complete (all 830 units); trailing true-positive yield=0.17"
+  },
+  "budget": {
+    "calls": 41,
+    "input_tokens": 2365982,
+    "output_tokens": 84902,
+    "total_tokens": 4816743,
+    "max_tokens": 6000000,
+    "exhausted": false
+  },
+  "raw_candidate_count": 136,
+  "reported_findings": [
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1222,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_000976210db7287a",
+      "symbol": "upload_artifact_handler",
+      "title": "Artifact upload handler writes files with no visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1222,
+          "quote": "run_uuid = args.get(\"run_uuid\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1228,
+          "quote": "path = args.get(\"path\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1276,
+          "quote": "f.write(data)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1740,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_044efac8c91a23ec",
+      "symbol": "_delete_model_version",
+      "title": "Delete model version handler lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1740,
+          "quote": "\"name\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1741,
+          "quote": "\"version\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1744,
+          "quote": "_get_model_registry_store().delete_model_version(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1697,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_078e5245e5759dbc",
+      "symbol": "_update_model_version",
+      "title": "Update model version handler lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1697,
+          "quote": "\"name\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1705,
+          "quote": "model_version = _get_model_registry_store().update_model_version(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/utils/rest_utils.py",
+      "line": 120,
+      "class": "CWE-209",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_09e4543a0d67ee5e",
+      "symbol": "http_request",
+      "title": "Timeout exception with internal URL included in MlflowException message",
+      "evidence": [
+        {
+          "file": "mlflow/utils/rest_utils.py",
+          "line": 120,
+          "quote": "except requests.exceptions.Timeout as to:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/utils/rest_utils.py",
+          "line": 122,
+          "quote": "f\"API request to {url} failed with timeout exception {to}.\"",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 938,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_0aec10bd652e0973",
+      "symbol": "_list_artifacts",
+      "title": "Path traversal in _list_artifacts \u2014 sufficiency of validate_path_is_safe unknown",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 938,
+          "quote": "path = request_message.path",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 939,
+          "quote": "validate_path_is_safe(path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 951,
+          "quote": "artifact_entities = _get_artifact_repo(run).list_artifacts(path)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1909,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_0cb2fe060500f3e3",
+      "symbol": "_upload_artifact",
+      "title": "Artifact upload handler writes unbounded data with no visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1909,
+          "quote": "validate_path_is_safe(artifact_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1916,
+          "quote": "chunk = request.stream.read(chunk_size)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1922,
+          "quote": "artifact_repo.log_artifact(tmp_path, artifact_path=head or None)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/sqlalchemy_store.py",
+      "line": 192,
+      "class": "CWE-209",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_10ca41075f5fcb47",
+      "symbol": "SqlAlchemyStore.create_registered_model_permission",
+      "title": "Database IntegrityError details leaked in registered-model-permission error message",
+      "evidence": [
+        {
+          "file": "mlflow/server/auth/sqlalchemy_store.py",
+          "line": 192,
+          "quote": "except IntegrityError as e:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/auth/sqlalchemy_store.py",
+          "line": 194,
+          "quote": "f\"Registered model permission (name={name}, username={username}) \"",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/auth/sqlalchemy_store.py",
+          "line": 195,
+          "quote": "f\"already exists. Error: {e}\"",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1884,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_10ee5dd99237bf3a",
+      "symbol": "_download_artifact",
+      "title": "Artifact download handler lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1884,
+          "quote": "validate_path_is_safe(artifact_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1887,
+          "quote": "dst = artifact_repo.download_artifacts(artifact_path, tmp_dir.name)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 681,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_1182240c6a91035b",
+      "symbol": "_create_run",
+      "title": "Missing authorization in _create_run \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 681,
+          "quote": "def _create_run():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 692,
+          "quote": "run = _get_tracking_store().create_run(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+      "line": 48,
+      "class": "CWE-312",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_11ae9f04a111a020",
+      "symbol": "SFTPArtifactRepository.__init__",
+      "title": "SFTP: plaintext password from URI stored in config dict and passed to pysftp.Connection",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+          "line": 48,
+          "quote": "\"password\": parsed.password,",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+          "line": 81,
+          "quote": "connections = [pysftp.Connection(**self.config) for _ in range(self.max_workers)]",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1774,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_13c658c618ec1e66",
+      "symbol": "_search_model_versions",
+      "title": "Search model versions handler lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1774,
+          "quote": "model_versions = store.search_model_versions(",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1781,
+          "quote": "response_message.model_versions.extend([e.to_proto() for e in model_versions])",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/utils/file_utils.py",
+      "line": 737,
+      "class": "CWE-209",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_150cfee2b9cac8fa",
+      "symbol": "parallelized_download_file_using_http_uri.run_download",
+      "title": "Subprocess stdout/stderr with potential presigned URL credentials forwarded to caller",
+      "evidence": [
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 737,
+          "quote": "except (TimeoutExpired, CalledProcessError) as e:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 741,
+          "quote": "{e.stdout.strip()}",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 744,
+          "quote": "{e.stderr.strip()}",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1019,
+      "class": "CWE-639",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_18b2d6dbe8e8354d",
+      "symbol": "get_metric_history_bulk_handler",
+      "title": "IDOR \u2014 metric history fetched for caller-supplied run_ids without ownership check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1019,
+          "quote": "run_ids = request.args.to_dict(flat=False).get(\"run_id\", [])",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1051,
+          "quote": "run_id=run_id,",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/utils/file_utils.py",
+      "line": 445,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_19afd6512c163247",
+      "symbol": "read_file",
+      "title": "read_file joins file_name onto parent_path without containment check",
+      "evidence": [
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 445,
+          "quote": "file_path = os.path.join(parent_path, file_name)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 446,
+          "quote": "with codecs.open(file_path, mode=\"r\", encoding=ENCODING) as f:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1754,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_1bce58cc2f914c08",
+      "symbol": "_get_model_version_download_uri",
+      "title": "Get model version download URI exposes artifact storage location with no visible auth check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1754,
+          "quote": "download_uri = _get_model_registry_store().get_model_version_download_uri(",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1757,
+          "quote": "response_message = GetModelVersionDownloadUri.Response(artifact_uri=download_uri)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/__init__.py",
+      "line": 105,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_1d7f97133e6c7b2b",
+      "symbol": "serve_upload_artifact",
+      "title": "Artifact upload handler may lack authentication",
+      "evidence": [
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 105,
+          "quote": "def serve_upload_artifact():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 106,
+          "quote": "return upload_artifact_handler()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/azure_data_lake_artifact_repo.py",
+      "line": 226,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_1f8d06c31bb689e9",
+      "symbol": "AzureDataLakeArtifactRepository._get_presigned_uri",
+      "title": "Unvalidated artifact_file_path interpolated into Azure ADLS presigned URL",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/azure_data_lake_artifact_repo.py",
+          "line": 226,
+          "quote": "f\"https://{self.account_name}.dfs.core.windows.net/{self.container}/\"",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/azure_data_lake_artifact_repo.py",
+          "line": 227,
+          "quote": "f\"{self.base_data_lake_directory}/{artifact_file_path}?{sas_token}\"",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1222,
+      "class": "CWE-639",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_2254f0fb1a4633ba",
+      "symbol": "upload_artifact_handler",
+      "title": "Run fetched by caller-supplied UUID without ownership verification",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1222,
+          "quote": "run_uuid = args.get(\"run_uuid\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1249,
+          "quote": "run = _get_tracking_store().get_run(run_uuid)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1278,
+          "quote": "_log_artifact_to_repo(file_path, run, dirname, artifact_dir)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/s3_artifact_repo.py",
+      "line": 306,
+      "class": "CWE-22",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_24a6dc3965ea697b",
+      "symbol": "S3ArtifactRepository.abort_multipart_upload",
+      "title": "S3 abort_multipart: basename strips traversal; S3 keys lack filesystem traversal semantics",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/s3_artifact_repo.py",
+          "line": 306,
+          "quote": "dest_path = posixpath.join(dest_path, os.path.basename(local_file))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 782,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_25295d70352e8798",
+      "symbol": "_log_param",
+      "title": "Missing authorization in _log_param \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 782,
+          "quote": "def _log_param():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 793,
+          "quote": "_get_tracking_store().log_param(run_id, param)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/utils/file_utils.py",
+      "line": 431,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_25337e1a49477061",
+      "symbol": "read_file_lines",
+      "title": "read_file_lines joins file_name onto parent_path without containment check",
+      "evidence": [
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 431,
+          "quote": "file_path = os.path.join(parent_path, file_name)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 432,
+          "quote": "with codecs.open(file_path, mode=\"r\", encoding=ENCODING) as f:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 780,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_2567e58dda07fe55",
+      "symbol": "update_user_password",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 788,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_2e2c7dae589835ea",
+      "symbol": "update_user_admin",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1679,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_304024f26bb521a0",
+      "symbol": "_get_model_version",
+      "title": "Get model version handler lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1679,
+          "quote": "\"name\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1683,
+          "quote": "model_version = _get_model_registry_store().get_model_version(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 258,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_3091d38bc81a367e",
+      "symbol": "_get_proxied_run_artifact_destination_path",
+      "title": "posixpath.join of external-derived paths without containment check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 258,
+          "quote": "proxied_run_artifact_root_path = parsed_proxied_artifact_root.path.split(",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 263,
+          "quote": "posixpath.join(proxied_run_artifact_root_path, relative_path)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 637,
+      "class": "CWE-639",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_33d2134621aa73f6",
+      "symbol": "_delete_experiment",
+      "title": "Experiment deleted solely by caller-supplied ID \u2014 no ownership check visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 637,
+          "quote": "schema={\"experiment_id\": [_assert_required, _assert_string]}",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 639,
+          "quote": "_get_tracking_store().delete_experiment(request_message.experiment_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+      "line": 109,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_33f7f1457e0e0ca9",
+      "symbol": "SFTPArtifactRepository.list_artifacts",
+      "title": "SFTP list_artifacts: caller-supplied path joined without containment check",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+          "line": 109,
+          "quote": "list_dir = posixpath.join(artifact_dir, path) if path else artifact_dir",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+          "line": 113,
+          "quote": "artifact_files = sftp.listdir(list_dir)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 820,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_343ab8a145c0e900",
+      "symbol": "update_experiment_permission",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/store/artifact/local_artifact_repo.py",
+      "line": 105,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_393c4b6fbaaa0f8c",
+      "symbol": "LocalArtifactRepository._download_file",
+      "title": "LocalArtifactRepository._download_file: normpath does not block absolute paths before shutil.copy2",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 105,
+          "quote": "remote_file_path = os.path.join(self.artifact_dir, os.path.normpath(remote_file_path))",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 106,
+          "quote": "shutil.copy2(remote_file_path, local_path)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/sqlalchemy_store.py",
+      "line": 52,
+      "class": "CWE-209",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_3b42a71df261427f",
+      "symbol": "SqlAlchemyStore.create_user",
+      "title": "Database IntegrityError details leaked in user-creation error message",
+      "evidence": [
+        {
+          "file": "mlflow/server/auth/sqlalchemy_store.py",
+          "line": 52,
+          "quote": "except IntegrityError as e:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/auth/sqlalchemy_store.py",
+          "line": 54,
+          "quote": "f\"User (username={username}) already exists. Error: {e}\"",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1955,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_3bfe2473887f0e6b",
+      "symbol": "_delete_artifact_mlflow_artifacts",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1977,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_3e16802a83954047",
+      "symbol": "_create_multipart_upload_artifact",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/__init__.py",
+      "line": 100,
+      "class": "CWE-918",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_3ea547a887133dec",
+      "symbol": "serve_gateway_proxy",
+      "title": "Gateway proxy may forward attacker-controlled URLs (SSRF)",
+      "evidence": [
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 100,
+          "quote": "def serve_gateway_proxy():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 101,
+          "quote": "return gateway_proxy_handler()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/__init__.py",
+      "line": 100,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_40682779152dbd1d",
+      "symbol": "serve_gateway_proxy",
+      "title": "Gateway proxy handler may lack authentication",
+      "evidence": [
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 100,
+          "quote": "def serve_gateway_proxy():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 101,
+          "quote": "return gateway_proxy_handler()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/__init__.py",
+      "line": 204,
+      "class": "CWE-78",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_40a8035bd3e650e1",
+      "symbol": "_build_gunicorn_command",
+      "title": "Gunicorn command built as list, not shell string \u2014 CWE-78 trigger not met",
+      "evidence": [
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 204,
+          "quote": "opts = shlex.split(gunicorn_opts) if gunicorn_opts else []",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 205,
+          "quote": "return [",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/tracking/file_store.py",
+      "line": 1130,
+      "class": "CWE-327",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_4266b6615bcb9f38",
+      "symbol": "FileStore._get_dataset_id",
+      "title": "MD5 for dataset identifier is not a security-critical context",
+      "evidence": [
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 1130,
+          "quote": "md5 = insecure_hash.md5(dataset_name.encode(\"utf-8\"))",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 1132,
+          "quote": "return md5.hexdigest()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+      "line": 201,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_427faebf2b9f5c0f",
+      "symbol": "DatabricksArtifactRepository._get_read_credential_infos",
+      "title": "Caller-supplied remote_file_paths joined onto artifact root without containment check",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 201,
+          "quote": "run_relative_remote_paths = [",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 202,
+          "quote": "posixpath.join(self.run_relative_artifact_repo_root_path, p) for p in remote_file_paths",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 773,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_48691d2c161c8de6",
+      "symbol": "get_user",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/utils/uri.py",
+      "line": 357,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_49a470f74b337c70",
+      "symbol": "dbfs_hdfs_uri_to_fuse_path",
+      "title": "FUSE path constructed by string slicing without path normalization",
+      "evidence": [
+        {
+          "file": "mlflow/utils/uri.py",
+          "line": 357,
+          "quote": "if not dbfs_uri.startswith(_DBFS_HDFS_URI_PREFIX):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/utils/uri.py",
+          "line": 363,
+          "quote": "return _DBFS_FUSE_PREFIX + dbfs_uri[len(_DBFS_HDFS_URI_PREFIX) :]",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/ftp_artifact_repo.py",
+      "line": 25,
+      "class": "CWE-312",
+      "severity": "low",
+      "verdict": "needs-review",
+      "fingerprint": "fp_4a8ae94f3bc0b09c",
+      "symbol": "FTPArtifactRepository.__init__",
+      "title": "FTP password stored in plaintext in-memory config and transmitted over plain FTP",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/ftp_artifact_repo.py",
+          "line": 25,
+          "quote": "\"password\": parsed.password,",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/ftp_artifact_repo.py",
+          "line": 34,
+          "quote": "self.config[\"password\"] = unquote(parsed.password)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/hdfs_artifact_repo.py",
+      "line": 163,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_4eb2bbff27363fb4",
+      "symbol": "HdfsArtifactRepository.delete_artifacts",
+      "title": "HDFS delete: unsanitized artifact_path joined with posixpath.join",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/hdfs_artifact_repo.py",
+          "line": 163,
+          "quote": "path = posixpath.join(self.path, artifact_path) if artifact_path else self.path",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/hdfs_artifact_repo.py",
+          "line": 165,
+          "quote": "hdfs.delete(path, recursive=True)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/tracking/file_store.py",
+      "line": 227,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_5161f2a2f969ab9a",
+      "symbol": "FileStore._get_param_path",
+      "title": "FileStore._get_param_path: param_name used in path join after unseen validator",
+      "evidence": [
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 227,
+          "quote": "_validate_param_name(param_name)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 229,
+          "quote": "self._get_run_dir(experiment_id, run_uuid), FileStore.PARAMS_FOLDER_NAME, param_name",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 648,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_562dd716193b563b",
+      "symbol": "_restore_experiment",
+      "title": "_restore_experiment mutates state without visible auth",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 648,
+          "quote": "def _restore_experiment():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 652,
+          "quote": "_get_tracking_store().restore_experiment(request_message.experiment_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 635,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_57c1f99760fd848b",
+      "symbol": "_delete_experiment",
+      "title": "_delete_experiment performs destructive mutation without visible auth",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 635,
+          "quote": "def _delete_experiment():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 639,
+          "quote": "_get_tracking_store().delete_experiment(request_message.experiment_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+      "line": 135,
+      "class": "CWE-129",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_5a81fe1a2ee4ad51",
+      "symbol": "DatabricksArtifactRepository._extract_run_id",
+      "title": "Unguarded index-3 split on artifact URI allows IndexError and run_id spoofing",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 135,
+          "quote": "artifact_path = extract_and_normalize_path(artifact_uri)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 136,
+          "quote": "return artifact_path.split(\"/\")[3]",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 665,
+      "class": "CWE-639",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_5ae58e3fe2b0b044",
+      "symbol": "_update_experiment",
+      "title": "Rename targets caller-supplied experiment_id without ownership check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 665,
+          "quote": "\"experiment_id\": [_assert_required, _assert_string],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 670,
+          "quote": "_get_tracking_store().rename_experiment(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 863,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_5b557dbcec7ac379",
+      "symbol": "delete_registered_model_permission",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 709,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_5b810325ffecab10",
+      "symbol": "_update_run",
+      "title": "Missing authorization in _update_run \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 709,
+          "quote": "def _update_run():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 723,
+          "quote": "updated_info = _get_tracking_store().update_run_info(run_id, status, end_time, run_name)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 864,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_5c29a5fb5f775e91",
+      "symbol": "_delete_tag",
+      "title": "Missing authorization in _delete_tag \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 864,
+          "quote": "def _delete_tag():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 872,
+          "quote": "_get_tracking_store().delete_tag(request_message.run_id, request_message.key)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/http_artifact_repo.py",
+      "line": 122,
+      "class": "CWE-22",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_5c2f6fd8dba872a2",
+      "symbol": "HttpArtifactRepository.create_multipart_upload",
+      "title": "HTTP multipart: local_file path sent to server \u2014 client-side info disclosure, not path traversal",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/http_artifact_repo.py",
+          "line": 122,
+          "quote": "\"path\": local_file,",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/http_artifact_repo.py",
+          "line": 125,
+          "quote": "resp = http_request(host_creds, endpoint, \"POST\", json=params)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 578,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_5d661dea91db5a8b",
+      "symbol": "_create_experiment",
+      "title": "_create_experiment mutates state without visible auth",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 578,
+          "quote": "def _create_experiment():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 589,
+          "quote": "experiment_id = _get_tracking_store().create_experiment(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/cloud_artifact_repo.py",
+      "line": 153,
+      "class": "CWE-209",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_5fb436fd95d187d7",
+      "symbol": "CloudArtifactRepository.log_artifacts",
+      "title": "repr(e) of upload exceptions and internal file paths leaked in error message",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/cloud_artifact_repo.py",
+          "line": 153,
+          "quote": "failed_uploads[src_file_path] = repr(e)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/cloud_artifact_repo.py",
+          "line": 159,
+          "quote": "f\" to {self.artifact_uri}: {failed_uploads}\"",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/tracking/sqlalchemy_store.py",
+      "line": 221,
+      "class": "CWE-89",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_60a4a1e1e99adc9a",
+      "symbol": "SqlAlchemyStore._create_default_experiment",
+      "title": "Raw f-string SQL INSERT in _create_default_experiment using server-configured URI",
+      "evidence": [
+        {
+          "file": "mlflow/store/tracking/sqlalchemy_store.py",
+          "line": 221,
+          "quote": "values = \", \".join([decorate(default_experiment.get(c)) for c in columns])",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/tracking/sqlalchemy_store.py",
+          "line": 226,
+          "quote": "session.execute(",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/tracking/sqlalchemy_store.py",
+          "line": 207,
+          "quote": "SqlExperiment.artifact_location.name: str(self._get_artifact_location(0)),",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1129,
+      "class": "CWE-918",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_6161a93af7d2a675",
+      "symbol": "gateway_proxy_handler",
+      "title": "SSRF via unsanitized gateway_path appended to server-side target URI",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1129,
+          "quote": "gateway_path = args.get(\"gateway_path\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1135,
+          "quote": "request_type = request.method",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1138,
+          "quote": "response = requests.request(request_type, f\"{target_uri}/{gateway_path}\", json=json_data)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/__init__.py",
+      "line": 115,
+      "class": "CWE-22",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_62aef6d5be28fd14",
+      "symbol": "serve_static_file",
+      "title": "Flask send_from_directory internally prevents path traversal",
+      "evidence": [
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 115,
+          "quote": "return send_from_directory(app.static_folder, path, cache_timeout=2419200)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/local_artifact_repo.py",
+      "line": 110,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_63f261c814801bad",
+      "symbol": "LocalArtifactRepository.delete_artifacts",
+      "title": "LocalArtifactRepository.delete_artifacts: no normpath before shutil.rmtree",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 110,
+          "quote": "os.path.join(self._artifact_dir, artifact_path) if artifact_path else self._artifact_dir",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 114,
+          "quote": "shutil.rmtree(artifact_path)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/artifact_repo.py",
+      "line": 212,
+      "class": "CWE-209",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_668456d532f852cf",
+      "symbol": "ArtifactRepository.download_artifacts",
+      "title": "Download exception details (including artifact_uri and error text) leaked to callers",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/artifact_repo.py",
+          "line": 212,
+          "quote": "path = futures[f]",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/artifact_repo.py",
+          "line": 213,
+          "quote": "failed_downloads[path] = e",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/artifact_repo.py",
+          "line": 223,
+          "quote": "f\" artifacts from {self.artifact_uri}:\\n{_truncate_error(failures)}\"",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 732,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_6a5b2124f511ae7b",
+      "symbol": "_delete_run",
+      "title": "Missing authorization in _delete_run \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 732,
+          "quote": "def _delete_run():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 736,
+          "quote": "_get_tracking_store().delete_run(request_message.run_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1093,
+      "class": "CWE-639",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_6b2a60ddaab3d040",
+      "symbol": "search_datasets_handler",
+      "title": "IDOR \u2014 dataset summaries fetched for caller-supplied experiment_ids without ownership check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1093,
+          "quote": "experiment_ids = request.json.get(\"experiment_ids\", [])",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1113,
+          "quote": "summary.to_dict() for summary in store._search_datasets(experiment_ids)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/hdfs_artifact_repo.py",
+      "line": 240,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_6bd372457b994392",
+      "symbol": "_download_hdfs_file",
+      "title": "HDFS download: local_file_path written without containment check",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/hdfs_artifact_repo.py",
+          "line": 240,
+          "quote": "dirs = os.path.dirname(local_file_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/hdfs_artifact_repo.py",
+          "line": 243,
+          "quote": "with open(local_file_path, \"wb\") as f:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/sqlalchemy_store.py",
+      "line": 116,
+      "class": "CWE-209",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_6cca80631f62c290",
+      "symbol": "SqlAlchemyStore.create_experiment_permission",
+      "title": "Database IntegrityError details leaked in experiment-permission error message",
+      "evidence": [
+        {
+          "file": "mlflow/server/auth/sqlalchemy_store.py",
+          "line": 116,
+          "quote": "except IntegrityError as e:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/auth/sqlalchemy_store.py",
+          "line": 118,
+          "quote": "f\"Experiment permission (experiment_id={experiment_id}, username={username}) \"",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/auth/sqlalchemy_store.py",
+          "line": 119,
+          "quote": "f\"already exists. Error: {e}\"",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/tracking/file_store.py",
+      "line": 234,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_6dce9ff3718d9762",
+      "symbol": "FileStore._get_experiment_tag_path",
+      "title": "FileStore._get_experiment_tag_path: tag_name used in path join after unseen validator",
+      "evidence": [
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 234,
+          "quote": "_validate_param_name(tag_name)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 240,
+          "quote": "FileStore.TAGS_FOLDER_NAME,",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/tracking/file_store.py",
+      "line": 220,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_6f5ebcd1f0731edb",
+      "symbol": "FileStore._get_metric_path",
+      "title": "FileStore._get_metric_path: metric_key used in path join after unseen validator",
+      "evidence": [
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 220,
+          "quote": "_validate_metric_name(metric_key)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 222,
+          "quote": "self._get_run_dir(experiment_id, run_uuid), FileStore.METRICS_FOLDER_NAME, metric_key",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/utils/file_utils.py",
+      "line": 347,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_700f41e875b04ee0",
+      "symbol": "render_and_merge_yaml.from_json",
+      "title": "from_json Jinja2 filter opens arbitrary path with no containment check",
+      "evidence": [
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 347,
+          "quote": "def from_json(input_var):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 348,
+          "quote": "with open(input_var, encoding=\"utf-8\") as f:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/s3_artifact_repo.py",
+      "line": 295,
+      "class": "CWE-22",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_74d54e580a2399f7",
+      "symbol": "S3ArtifactRepository.complete_multipart_upload",
+      "title": "S3 complete_multipart: basename strips traversal; S3 keys lack filesystem traversal semantics",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/s3_artifact_repo.py",
+          "line": 295,
+          "quote": "dest_path = posixpath.join(dest_path, os.path.basename(local_file))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 869,
+      "class": "CWE-639",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_77946a3189f41993",
+      "symbol": "_delete_tag",
+      "title": "IDOR \u2014 tag deleted by caller-supplied run_id and key without ownership check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 869,
+          "quote": "\"key\": [_assert_required, _assert_string],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 872,
+          "quote": "_get_tracking_store().delete_tag(request_message.run_id, request_message.key)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/azure_data_lake_artifact_repo.py",
+      "line": 213,
+      "class": "CWE-209",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_79595184a7c4bb33",
+      "symbol": "AzureDataLakeArtifactRepository._multipart_upload",
+      "title": "Broad except-Exception wrapping is a systemic pervasive pattern",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/azure_data_lake_artifact_repo.py",
+          "line": 213,
+          "quote": "except Exception as err:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/azure_data_lake_artifact_repo.py",
+          "line": 214,
+          "quote": "raise MlflowException(err)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/__init__.py",
+      "line": 71,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_83b9ff3b5ff883e9",
+      "symbol": "serve_artifacts",
+      "title": "Artifact-serving handler may lack authentication",
+      "evidence": [
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 71,
+          "quote": "def serve_artifacts():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 72,
+          "quote": "return get_artifact_handler()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/hdfs_artifact_repo.py",
+      "line": 145,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_859dc891076d814b",
+      "symbol": "HdfsArtifactRepository.download_artifacts",
+      "title": "os.path.normpath insufficient to prevent path traversal in HDFS artifact download",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/hdfs_artifact_repo.py",
+          "line": 145,
+          "quote": "local_path = os.path.join(local_dir, os.path.normpath(artifact_path))",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/hdfs_artifact_repo.py",
+          "line": 146,
+          "quote": "_download_hdfs_file(hdfs, hdfs_base_path, local_path)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1829,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_88568bc0d7c1af21",
+      "symbol": "_set_registered_model_alias",
+      "title": "Set registered model alias handler lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1829,
+          "quote": "\"name\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1830,
+          "quote": "\"alias\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1834,
+          "quote": "_get_model_registry_store().set_registered_model_alias(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 829,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_8a7865f48dd2e8be",
+      "symbol": "delete_experiment_permission",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+      "line": 130,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_901f6352d8790d1b",
+      "symbol": "SFTPArtifactRepository.delete_artifacts",
+      "title": "SFTP delete_artifacts: artifact_path joined without containment check before recursive delete",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+          "line": 130,
+          "quote": "artifact_dir = posixpath.join(self.path, artifact_path) if artifact_path else self.path",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+          "line": 132,
+          "quote": "self._delete_inner(artifact_dir, sftp)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1234,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_918c167afbbb8580",
+      "symbol": "upload_artifact_handler",
+      "title": "dirname derived from validated path used in os.path.join without containment re-check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1234,
+          "quote": "validate_path_is_safe(path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1253,
+          "quote": "dirname = posixpath.dirname(path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1270,
+          "quote": "dir_path = os.path.join(tmpdir, dirname) if dirname else tmpdir",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1862,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_91e6dac4b0fbac85",
+      "symbol": "_get_model_version_by_alias",
+      "title": "Get model version by alias handler lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1862,
+          "quote": "\"name\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1863,
+          "quote": "\"alias\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1866,
+          "quote": "model_version = _get_model_registry_store().get_model_version_by_alias(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/local_artifact_repo.py",
+      "line": 26,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_92acc3a1c13c4899",
+      "symbol": "LocalArtifactRepository.log_artifact",
+      "title": "LocalArtifactRepository.log_artifact: normpath insufficient against absolute paths",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 26,
+          "quote": "verify_artifact_path(artifact_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 30,
+          "quote": "artifact_path = os.path.normpath(artifact_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 33,
+          "quote": "os.path.join(self.artifact_dir, artifact_path) if artifact_path else self.artifact_dir",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1655,
+      "class": "CWE-639",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_92e65d6899bf7456",
+      "symbol": "get_model_version_artifact_handler",
+      "title": "Model version artifact fetched by caller-supplied name/version without ownership check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1655,
+          "quote": "name = request_dict.get(\"name\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1656,
+          "quote": "version = request_dict.get(\"version\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1659,
+          "quote": "artifact_uri = _get_model_registry_store().get_model_version_download_uri(name, version)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/dbfs_artifact_repo.py",
+      "line": 197,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_9451fa5b7d2b8609",
+      "symbol": "dbfs_artifact_repo_factory",
+      "title": "DBFS FUSE file:// URI constructed from artifact_uri without path containment check",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/dbfs_artifact_repo.py",
+          "line": 197,
+          "quote": "if not is_valid_dbfs_uri(artifact_uri):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/dbfs_artifact_repo.py",
+          "line": 221,
+          "quote": "file_uri = \"file:///dbfs/{}\".format(strip_prefix(final_artifact_uri, \"dbfs:/\"))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 844,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_959433a8c7088fb6",
+      "symbol": "_set_tag",
+      "title": "Missing authorization in _set_tag \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 844,
+          "quote": "def _set_tag():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 855,
+          "quote": "_get_tracking_store().set_tag(run_id, tag)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/tracking/file_store.py",
+      "line": 1136,
+      "class": "CWE-327",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_960d2c01b8d0d202",
+      "symbol": "FileStore._get_input_id",
+      "title": "MD5 for input identifier is not a security-critical context",
+      "evidence": [
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 1136,
+          "quote": "md5 = insecure_hash.md5(dataset_id.encode(\"utf-8\"))",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 1138,
+          "quote": "return md5.hexdigest()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/__init__.py",
+      "line": 77,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_9d9904bb330233e2",
+      "symbol": "serve_model_version_artifact",
+      "title": "Model-version artifact handler may lack authentication",
+      "evidence": [
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 77,
+          "quote": "def serve_model_version_artifact():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 78,
+          "quote": "return get_model_version_artifact_handler()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+      "line": 421,
+      "class": "CWE-918",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_9db7d2e18387fc96",
+      "symbol": "DatabricksArtifactRepository._download_from_cloud",
+      "title": "Presigned URI from Databricks service passed to HTTP downloader without host/scheme validation",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 421,
+          "quote": "if cloud_credential_info.type not in [",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 431,
+          "quote": "download_file_using_http_uri(",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 432,
+          "quote": "cloud_credential_info.signed_uri,",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/s3_artifact_repo.py",
+      "line": 261,
+      "class": "CWE-22",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_9f4ebb5cdf608bc8",
+      "symbol": "S3ArtifactRepository.create_multipart_upload",
+      "title": "S3 multipart create: os.path.basename effectively strips traversal from local_file",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/s3_artifact_repo.py",
+          "line": 261,
+          "quote": "dest_path = posixpath.join(dest_path, os.path.basename(local_file))",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1884,
+      "class": "CWE-113",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_a0e90f1381396654",
+      "symbol": "_download_artifact",
+      "title": "Artifact path may enable header injection via Content-Disposition",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1884,
+          "quote": "validate_path_is_safe(artifact_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1899,
+          "quote": "return _response_with_file_attachment_headers(artifact_path, file_sender_response)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 661,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_a16770a2c4760379",
+      "symbol": "_update_experiment",
+      "title": "_update_experiment renames experiment without visible auth",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 661,
+          "quote": "def _update_experiment():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 670,
+          "quote": "_get_tracking_store().rename_experiment(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 2010,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_a3612abfcb61b191",
+      "symbol": "_complete_multipart_upload_artifact",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 854,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_a5184a6caaec9087",
+      "symbol": "update_registered_model_permission",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1129,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_aaa86cd2e30d1f3d",
+      "symbol": "gateway_proxy_handler",
+      "title": "Gateway proxy handler forwards arbitrary requests with no visible auth check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1129,
+          "quote": "gateway_path = args.get(\"gateway_path\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1136,
+          "quote": "json_data = args.get(\"json_data\", None)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1138,
+          "quote": "response = requests.request(request_type, f\"{target_uri}/{gateway_path}\", json=json_data)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 662,
+      "class": "CWE-113",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_abef182e36fa1bf8",
+      "symbol": "alert",
+      "title": "CWE-113",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 435,
+      "class": "CWE-94",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_ac7237d8eb065e9c",
+      "symbol": "get_auth_func",
+      "title": "CWE-94",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/__init__.py",
+      "line": 188,
+      "class": "CWE-78",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_ade6e5e501d96ced",
+      "symbol": "_build_waitress_command",
+      "title": "Waitress command built as list, not shell string \u2014 CWE-78 trigger not met",
+      "evidence": [
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 188,
+          "quote": "opts = shlex.split(waitress_opts) if waitress_opts else []",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 189,
+          "quote": "return [",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/http_artifact_repo.py",
+      "line": 157,
+      "class": "CWE-918",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_ae30eb33dd52ea75",
+      "symbol": "HttpArtifactRepository._upload_part",
+      "title": "SSRF via credential.url: client making requests to server-provided URLs is expected behavior",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/http_artifact_repo.py",
+          "line": 157,
+          "quote": "response = requests.put(credential.url, data=data, headers=credential.headers)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/tracking/file_store.py",
+      "line": 972,
+      "class": "CWE-209",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_ae75eeb859814b23",
+      "symbol": "FileStore._validate_new_param_value",
+      "title": "Parameter immutability error is a controlled 4xx validation message",
+      "evidence": [
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 972,
+          "quote": "raise MlflowException(",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 976,
+          "quote": "databricks_pb2.INVALID_PARAMETER_VALUE,",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 549,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_afa6455aee2185b0",
+      "symbol": "get_artifact_handler",
+      "title": "get_artifact_handler fetches and serves run artifacts without visible auth",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 549,
+          "quote": "run_id = request_dict.get(\"run_id\") or request_dict.get(\"run_uuid\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 552,
+          "quote": "run = _get_tracking_store().get_run(run_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 734,
+      "class": "CWE-639",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_b0f170669ac9a5b1",
+      "symbol": "_delete_run",
+      "title": "IDOR \u2014 run deleted by caller-supplied run_id without ownership check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 734,
+          "quote": "DeleteRun(), schema={\"run_id\": [_assert_required, _assert_string]}",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 736,
+          "quote": "_get_tracking_store().delete_run(request_message.run_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 747,
+      "class": "CWE-639",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_b1782e3f86ee01fc",
+      "symbol": "_restore_run",
+      "title": "IDOR \u2014 run restored by caller-supplied run_id without ownership check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 747,
+          "quote": "RestoreRun(), schema={\"run_id\": [_assert_required, _assert_string]}",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 749,
+          "quote": "_get_tracking_store().restore_run(request_message.run_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/__init__.py",
+      "line": 95,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_b2c26bef4d7a6f15",
+      "symbol": "serve_create_promptlab_run",
+      "title": "Promptlab-run creation handler may lack authentication",
+      "evidence": [
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 95,
+          "quote": "def serve_create_promptlab_run():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/__init__.py",
+          "line": 96,
+          "quote": "return create_promptlab_run_handler()",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 719,
+      "class": "CWE-639",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_b507cecf777ac6c7",
+      "symbol": "_update_run",
+      "title": "IDOR \u2014 run updated by caller-supplied run_id without ownership check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 719,
+          "quote": "run_id = request_message.run_id or request_message.run_uuid",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 723,
+          "quote": "updated_info = _get_tracking_store().update_run_info(run_id, status, end_time, run_name)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/artifact_repo.py",
+      "line": 114,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_baf2e1506bc7c986",
+      "symbol": "ArtifactRepository._create_download_destination",
+      "title": "Path traversal in artifact download destination construction",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/artifact_repo.py",
+          "line": 114,
+          "quote": "src_artifact_path = src_artifact_path.rstrip(\"/\")  # Ensure correct dirname for trailing '/'",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/artifact_repo.py",
+          "line": 117,
+          "quote": "local_file_path = os.path.join(dst_local_dir_path, src_artifact_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/artifact_repo.py",
+          "line": 119,
+          "quote": "os.makedirs(local_dir_path, exist_ok=True)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1793,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_c0476201c6d328c6",
+      "symbol": "_set_model_version_tag",
+      "title": "Set model version tag handler lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1793,
+          "quote": "\"name\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1795,
+          "quote": "\"key\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1800,
+          "quote": "_get_model_registry_store().set_model_version_tag(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1812,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_c04eca0934b9ba2a",
+      "symbol": "_delete_model_version_tag",
+      "title": "Delete model version tag handler lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1812,
+          "quote": "\"name\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1814,
+          "quote": "\"key\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1817,
+          "quote": "_get_model_registry_store().delete_model_version_tag(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/local_artifact_repo.py",
+      "line": 79,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_c1bc3a1fd3b87fd8",
+      "symbol": "LocalArtifactRepository.download_artifacts",
+      "title": "LocalArtifactRepository.download_artifacts: no verify_artifact_path, normpath does not block absolute paths",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 79,
+          "quote": "local_artifact_path = os.path.join(self.artifact_dir, os.path.normpath(artifact_path))",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 82,
+          "quote": "return os.path.abspath(local_artifact_path)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 802,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_c24dad180391eb7b",
+      "symbol": "_log_inputs",
+      "title": "Missing authorization in _log_inputs \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 802,
+          "quote": "def _log_inputs():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 816,
+          "quote": "_get_tracking_store().log_inputs(run_id, datasets=datasets)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 474,
+      "class": "CWE-113",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_c518c6b4647473a7",
+      "symbol": "_response_with_file_attachment_headers",
+      "title": "Unquoted, unsanitized filename injected into Content-Disposition header",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 474,
+          "quote": "filename = pathlib.Path(file_path).name",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 478,
+          "quote": "response.headers[content_disposition_header_name] = f\"attachment; filename={filename}\"",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 745,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_c5b67902fb4e5a99",
+      "symbol": "create_user",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/store/artifact/ftp_artifact_repo.py",
+      "line": 125,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_c9525b8315146207",
+      "symbol": "FTPArtifactRepository._download_file",
+      "title": "local_path opened for write without containment check in FTP _download_file",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/ftp_artifact_repo.py",
+          "line": 125,
+          "quote": "remote_full_path = (",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/ftp_artifact_repo.py",
+          "line": 129,
+          "quote": "with open(local_path, \"wb\") as f:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/utils/file_utils.py",
+      "line": 657,
+      "class": "CWE-918",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_cb7a29f30076cbb1",
+      "symbol": "download_file_using_http_uri",
+      "title": "download_file_using_http_uri makes request to caller-supplied URI without allowlist",
+      "evidence": [
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 657,
+          "quote": "def download_file_using_http_uri(http_uri, download_path, chunk_size=100000000, headers=None):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 667,
+          "quote": "with cloud_storage_http_request(\"get\", http_uri, stream=True, headers=headers) as response:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1717,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_cbcda0813c94111f",
+      "symbol": "_transition_stage",
+      "title": "Transition model version stage handler lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1717,
+          "quote": "\"name\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1719,
+          "quote": "\"stage\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1723,
+          "quote": "model_version = _get_model_registry_store().transition_model_version_stage(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 650,
+      "class": "CWE-639",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_cbce0da327887a49",
+      "symbol": "_restore_experiment",
+      "title": "Experiment restored solely by caller-supplied ID \u2014 no ownership check visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 650,
+          "quote": "schema={\"experiment_id\": [_assert_required, _assert_string]}",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 652,
+          "quote": "_get_tracking_store().restore_experiment(request_message.experiment_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 2043,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_cf1dd174a9589a7b",
+      "symbol": "_abort_multipart_upload_artifact",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+      "line": 535,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_d5b6bd27f556395b",
+      "symbol": "DatabricksArtifactRepository._multipart_upload",
+      "title": "Caller-supplied artifact_file_path joined onto run root without containment check for multipart upload",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 535,
+          "quote": "run_relative_artifact_path = posixpath.join(",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 536,
+          "quote": "self.run_relative_artifact_repo_root_path, artifact_file_path or \"\"",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1163,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_d9fd5cbd38887a03",
+      "symbol": "create_promptlab_run_handler",
+      "title": "Promptlab run creation lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1163,
+          "quote": "experiment_id = args.get(\"experiment_id\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1194,
+          "quote": "store = _get_tracking_store()",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1196,
+          "quote": "run = _create_promptlab_run_impl(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+      "line": 182,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_da66d55414d28510",
+      "symbol": "DatabricksArtifactRepository._get_write_credential_infos",
+      "title": "Caller-supplied write paths joined onto artifact root without containment check",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 182,
+          "quote": "run_relative_remote_paths = [",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 183,
+          "quote": "posixpath.join(self.run_relative_artifact_repo_root_path, p or \"\")",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1016,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_db66d5bb6d5a86ad",
+      "symbol": "get_metric_history_bulk_handler",
+      "title": "Missing authorization in get_metric_history_bulk_handler \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1016,
+          "quote": "def get_metric_history_bulk_handler():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1019,
+          "quote": "run_ids = request.args.to_dict(flat=False).get(\"run_id\", [])",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1846,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_dddd123c8423baa9",
+      "symbol": "_delete_registered_model_alias",
+      "title": "Delete registered model alias handler lacks visible authorization check",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1846,
+          "quote": "\"name\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1847,
+          "quote": "\"alias\": [_assert_string, _assert_required],",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1850,
+          "quote": "_get_model_registry_store().delete_registered_model_alias(",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1090,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e04def2d18f5a8db",
+      "symbol": "search_datasets_handler",
+      "title": "Missing authorization in search_datasets_handler \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1090,
+          "quote": "def search_datasets_handler():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 1093,
+          "quote": "experiment_ids = request.json.get(\"experiment_ids\", [])",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 825,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e1fa3fd71c0d8a05",
+      "symbol": "_set_experiment_tag",
+      "title": "Missing authorization in _set_experiment_tag \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 825,
+          "quote": "def _set_experiment_tag():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 835,
+          "quote": "_get_tracking_store().set_experiment_tag(request_message.experiment_id, tag)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/artifact_repo.py",
+      "line": 189,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "true-positive",
+      "fingerprint": "fp_e21a661adc5ac669",
+      "symbol": "ArtifactRepository.download_artifacts",
+      "title": "Remote-supplied artifact path traversal allows directory creation outside download root",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/artifact_repo.py",
+          "line": 189,
+          "quote": "for file_info in self._iter_artifacts_recursive(artifact_path):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/artifact_repo.py",
+          "line": 190,
+          "quote": "if file_info.is_dir:  # Empty directory",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/artifact_repo.py",
+          "line": 191,
+          "quote": "os.makedirs(os.path.join(dst_path, file_info.path), exist_ok=True)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/utils/file_utils.py",
+      "line": 728,
+      "class": "CWE-918",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e31c3796593c9500",
+      "symbol": "parallelized_download_file_using_http_uri",
+      "title": "Subprocess receives http_uri without scheme/host validation",
+      "evidence": [
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 728,
+          "quote": "--http-uri\",",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/utils/file_utils.py",
+          "line": 729,
+          "quote": "http_uri,",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/local_artifact_repo.py",
+      "line": 50,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e5174d34937e2e34",
+      "symbol": "LocalArtifactRepository.log_artifacts",
+      "title": "LocalArtifactRepository.log_artifacts: normpath insufficient against absolute paths",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 50,
+          "quote": "verify_artifact_path(artifact_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 54,
+          "quote": "artifact_path = os.path.normpath(artifact_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/local_artifact_repo.py",
+          "line": 60,
+          "quote": "shutil.copytree(src=local_dir, dst=artifact_dir, dirs_exist_ok=True)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/config.py",
+      "line": 30,
+      "class": "CWE-312",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e55acf19b3a1f7e2",
+      "symbol": "read_auth_config",
+      "title": "CWE-312",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/store/tracking/sqlalchemy_store.py",
+      "line": 269,
+      "class": "CWE-209",
+      "severity": "medium",
+      "verdict": "true-positive",
+      "fingerprint": "fp_e55d5daa9d967a8c",
+      "symbol": "SqlAlchemyStore.create_experiment",
+      "title": "SQLAlchemy IntegrityError with SQL details exposed to caller in create_experiment",
+      "evidence": [
+        {
+          "file": "mlflow/store/tracking/sqlalchemy_store.py",
+          "line": 269,
+          "quote": "except sqlalchemy.exc.IntegrityError as e:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/tracking/sqlalchemy_store.py",
+          "line": 271,
+          "quote": "f\"Experiment(name={name}) already exists. Error: {e}\",",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/tracking/file_store.py",
+      "line": 213,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e7a0681bb9b56772",
+      "symbol": "FileStore._get_run_dir",
+      "title": "Path traversal in _get_run_dir depends on _validate_run_id strictness",
+      "evidence": [
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 213,
+          "quote": "_validate_run_id(run_uuid)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 216,
+          "quote": "return os.path.join(self._get_experiment_path(experiment_id, assert_exists=True), run_uuid)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 837,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_e939609459e1c665",
+      "symbol": "create_registered_model_permission",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/auth/entities.py",
+      "line": 54,
+      "class": "CWE-312",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_f416eee04149a828",
+      "symbol": "User.to_json",
+      "title": "CWE-312",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 549,
+      "class": "CWE-639",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_f49d46e7b918dfc4",
+      "symbol": "get_artifact_handler",
+      "title": "Run resolved solely by caller-supplied run_id \u2014 no ownership check visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 549,
+          "quote": "run_id = request_dict.get(\"run_id\") or request_dict.get(\"run_uuid\")",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 552,
+          "quote": "run = _get_tracking_store().get_run(run_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/ftp_artifact_repo.py",
+      "line": 75,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_f6889458a0a3b918",
+      "symbol": "FTPArtifactRepository.log_artifact",
+      "title": "local_file opened without containment check in FTP log_artifact",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/ftp_artifact_repo.py",
+          "line": 75,
+          "quote": "with open(local_file, \"rb\") as f:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/tracking/file_store.py",
+      "line": 245,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_f7d27c6645b3ffa6",
+      "symbol": "FileStore._get_tag_path",
+      "title": "FileStore._get_tag_path: tag_name used in path join after unseen validator",
+      "evidence": [
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 245,
+          "quote": "_validate_tag_name(tag_name)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/tracking/file_store.py",
+          "line": 247,
+          "quote": "self._get_run_dir(experiment_id, run_uuid), FileStore.TAGS_FOLDER_NAME, tag_name",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 796,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_f7eedfbbffd5e4ff",
+      "symbol": "delete_user",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 745,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_f942754d2632a765",
+      "symbol": "_restore_run",
+      "title": "Missing authorization in _restore_run \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 745,
+          "quote": "def _restore_run():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 749,
+          "quote": "_get_tracking_store().restore_run(request_message.run_id)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 1929,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_fcd35d582f26d322",
+      "symbol": "_list_artifacts_mlflow_artifacts",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/auth/__init__.py",
+      "line": 803,
+      "class": "CWE-862",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_fd2b85c2244e4de9",
+      "symbol": "create_experiment_permission",
+      "title": "CWE-862",
+      "evidence": []
+    },
+    {
+      "file": "mlflow/server/handlers.py",
+      "line": 758,
+      "class": "CWE-862",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_fdb5cef8e3c53c8e",
+      "symbol": "_log_metric",
+      "title": "Missing authorization in _log_metric \u2014 decorator/middleware not visible",
+      "evidence": [
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 758,
+          "quote": "def _log_metric():",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/server/handlers.py",
+          "line": 773,
+          "quote": "_get_tracking_store().log_metric(run_id, metric)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/utils/uri.py",
+      "line": 239,
+      "class": "CWE-22",
+      "severity": "low",
+      "verdict": "needs-review",
+      "fingerprint": "fp_fe8d408438cae3ec",
+      "symbol": "extract_and_normalize_path",
+      "title": "extract_and_normalize_path normalizes but does not enforce containment",
+      "evidence": [
+        {
+          "file": "mlflow/utils/uri.py",
+          "line": 239,
+          "quote": "normalized_path = posixpath.normpath(parsed_uri_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/utils/uri.py",
+          "line": 240,
+          "quote": "return normalized_path.lstrip(\"/\")",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+      "line": 125,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_ff5145f481c26de8",
+      "symbol": "SFTPArtifactRepository._download_file",
+      "title": "SFTP _download_file: remote_file_path joined without containment check",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+          "line": 125,
+          "quote": "remote_full_path = posixpath.join(self.path, remote_file_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/sftp_artifact_repo.py",
+          "line": 127,
+          "quote": "sftp.get(remote_full_path, local_path)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+      "line": 568,
+      "class": "CWE-22",
+      "severity": "medium",
+      "verdict": "needs-review",
+      "fingerprint": "fp_ffdb8018bd76bf21",
+      "symbol": "DatabricksArtifactRepository.list_artifacts",
+      "title": "Caller-supplied path forwarded to remote listing endpoint without normalization",
+      "evidence": [
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 568,
+          "quote": "if path:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/store/artifact/databricks_artifact_repo.py",
+          "line": 569,
+          "quote": "run_relative_path = posixpath.join(self.run_relative_artifact_repo_root_path, path)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    }
+  ]
+}

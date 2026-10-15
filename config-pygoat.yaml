@@ -1,0 +1,77 @@
+# Foundry PoC — PyGoat (OWASP intentionally vulnerable Django app).
+#
+# PyGoat is a ~1.1 MB web application with 70+ Python files across multiple
+# Django apps. This repo falls in the < 2 MB tier of the Antares paper's
+# Figure 6 (Section 8.3), where Antares achieves strong localization.
+#
+# Unlike bottle/PyYAML/Werkzeug (which are libraries), PyGoat is APPLICATION
+# code — it USES vulnerable patterns (pickle.loads, eval(), subprocess with
+# shell=True, raw SQL, requests.get on user input, etc.) that Foundry's
+# 13-rule corpus is designed to detect.
+#
+# Known vulnerability patterns (by CWE):
+#   CWE-89  — SQL injection via .objects.raw() in introduction/views.py
+#   CWE-502 — pickle.loads() on user-controlled input
+#   CWE-94  — eval() on user input
+#   CWE-78  — subprocess.Popen(command, shell=True)
+#   CWE-918 — SSRF via requests.get(url) on user input
+#   CWE-22  — path traversal via open(filename) on user input
+#   CWE-798 — hardcoded SECRET_KEY in settings.py
+#
+# Purpose: demonstrate end-to-end Antares + Foundry localization on an
+# appropriately-sized target where both localization AND detection work,
+# and measure cost savings vs a full `run`.
+
+system:
+  name: "foundry-poc-pygoat"
+
+target:
+  path: "targets/pygoat"
+  include_globs:
+    - "introduction/**/*.py"
+    - "challenge/**/*.py"
+    - "dockerized_labs/**/*.py"
+    - "pygoat/**/*.py"
+    - "*.py"
+  exclude_globs:
+    - "**/migrations/**"
+    - "**/tests/**"
+    - "**/__pycache__/**"
+    - "**/test.py"
+  pinned_ref: "master"
+
+goals: |
+  Evaluate this intentionally vulnerable Django web application for
+  server-side security defects reachable from external input: SQL injection,
+  unsafe deserialization, code injection, command injection, SSRF, path
+  traversal, hardcoded secrets, error information leakage, and missing
+  authorization. In scope: all application views, models, utilities,
+  playground labs, and settings. Out of scope: migrations, tests,
+  documentation, static assets.
+
+llm:
+  backend: "cursor"
+  model: "claude-sonnet-4-6"
+  scratch_cwd: ".scratch"
+
+batching:
+  detector_max_units: 25
+  detector_max_lines: 1200
+  triage_batch_size: 20
+
+budget:
+  max_tokens: 2000000
+  yield_window: 12
+  yield_min_true_positive_rate: 0.05
+
+severity:
+  scheme: "low_medium_high_critical"
+
+rules:
+  corpus_dir: "rules"
+
+store:
+  db_path: "out-pygoat/findings.db"
+  provenance_log: "out-pygoat/provenance.jsonl"
+  reports_dir: "out-pygoat/findings"
+  rule_gaps_log: "out-pygoat/rule-gaps.jsonl"

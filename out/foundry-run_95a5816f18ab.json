@@ -1,0 +1,96 @@
+{
+  "run_id": "run_95a5816f18ab",
+  "meta": {
+    "target": "langflow",
+    "pinned_ref": "1.7.3",
+    "model": "claude-sonnet-4-6",
+    "backend": "cursor",
+    "units_analyzed": 53,
+    "candidates": 3,
+    "total_tokens": 444444,
+    "max_tokens": 2000000,
+    "stop_reason": "coverage-complete (all 53 units); trailing true-positive yield=0.00"
+  },
+  "budget": {
+    "calls": 4,
+    "input_tokens": 220323,
+    "output_tokens": 3810,
+    "total_tokens": 444444,
+    "max_tokens": 2000000,
+    "exhausted": false
+  },
+  "raw_candidate_count": 3,
+  "reported_findings": [
+    {
+      "file": "src/lfx/src/lfx/services/settings/base.py",
+      "line": 647,
+      "class": "CWE-502",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_1b62572bb5831e83",
+      "symbol": "load_settings_from_yaml",
+      "title": "yaml.safe_load is not a deserialization vulnerability",
+      "evidence": [
+        {
+          "file": "src/lfx/src/lfx/services/settings/base.py",
+          "line": 647,
+          "quote": "settings_dict = yaml.safe_load(content)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "src/lfx/src/lfx/services/settings/base.py",
+      "line": 630,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_474ffe674ce860af",
+      "symbol": "save_settings_to_yaml",
+      "title": "Unsanitized caller-supplied path passed directly to file write",
+      "evidence": [
+        {
+          "file": "src/lfx/src/lfx/services/settings/base.py",
+          "line": 630,
+          "quote": "def save_settings_to_yaml(settings: Settings, file_path: str) -> None:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "src/lfx/src/lfx/services/settings/base.py",
+          "line": 631,
+          "quote": "with Path(file_path).open(\"w\", encoding=\"utf-8\") as f:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "src/lfx/src/lfx/services/settings/base.py",
+      "line": 643,
+      "class": "CWE-22",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_a5c779abd07ca5d5",
+      "symbol": "load_settings_from_yaml",
+      "title": "Path traversal mitigated by .name stripping directory components",
+      "evidence": [
+        {
+          "file": "src/lfx/src/lfx/services/settings/base.py",
+          "line": 643,
+          "quote": "file_path_ = Path(file_path)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "src/lfx/src/lfx/services/settings/base.py",
+          "line": 645,
+          "quote": "async with async_open(file_path_.name, encoding=\"utf-8\") as f:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    }
+  ]
+}

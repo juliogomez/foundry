@@ -12,16 +12,20 @@ You do not touch Python to customize the evaluation. That is the point.
 ## The files customized for this PoC
 
 This is the complete list of files that carry the customization: everything
-that had to be set to turn the generic Foundry design + engine into "evaluate
-Langflow with a Cursor-hosted model." For your own target, these are exactly the
-files you touch; everything else (`foundry_poc/*.py`) is the untouched engine.
+that had to be set to turn the generic Foundry design + engine into concrete
+evaluations (Langflow, MLflow, PyGoat) with a Cursor-hosted model. For your own
+target, these are exactly the files you touch; everything else (`foundry_poc/*.py`)
+is the untouched engine.
 
 | File | edited | Our customization | Target-specific? |
 |---|---|---|---|
-| `config.yaml` | the customized spec | The **wide run**: scope (`api/v1/*.py` + `helpers/flow.py` = 289 units), `goals`, model (`claude-sonnet-4-6`), budget cap, severity scheme, store paths. Each block resolves a spec `[NEEDS CLARIFICATION]`. | Yes (scope + goals are Langflow-shaped) |
-| `config-narrow.yaml` | created | The same policy over a hand-curated 12-module scope (107 units), kept as a scale contrast. Run with `--config config-narrow.yaml`. | Yes |
-| `goals:` block (inside both configs) | edited | The free-text evaluation mission, injected verbatim into the Detector and Triager prompts. This is *what you look for and what is out of scope*. | Yes |
-| `scripts/fetch_target.sh` | edited | `REPO_URL` (Langflow), `PINNED_REF=1.7.3`, `DEST`, and a sanity check that the real `compile()/exec()` sink is present at that revision. | Yes |
+| `config.yaml` | the customized spec | The **wide Langflow run**: scope (`api/v1/*.py` + `helpers/flow.py` = 289 units), `goals`, model (`claude-sonnet-4-6`), budget cap, severity scheme, store paths. Each block resolves a spec `[NEEDS CLARIFICATION]`. | Yes (scope + goals are Langflow-shaped) |
+| `config-narrow.yaml` | created | The same Langflow policy over a hand-curated 12-module scope (107 units), kept as a scale contrast. Run with `--config config-narrow.yaml`. | Yes |
+| `config-mlflow.yaml` | created | Full-scope sweep of MLflow v2.9.0 (830 units). Scale validation that the governance properties hold at ~3x the Langflow unit count. | Yes |
+| `config-pygoat.yaml` | created | PyGoat (OWASP, 1.1 MB) for the end-to-end Antares + Foundry `localize` integration demo (180 units). Proves the integration works (Antares locates, Foundry verifies) on an appropriately-sized application-code target. | Yes |
+| `config-localize-example.yaml` | created | Template for Antares-localized runs on Langflow (lower token budget, broad include_globs overridden dynamically by the localizer). | Yes |
+| `goals:` block (inside all configs) | edited | The free-text evaluation mission, injected verbatim into the Detector and Triager prompts. This is *what you look for and what is out of scope*. | Yes |
+| `scripts/fetch_target.sh` | edited | A multi-target registry: each target has a repo URL, pinned ref, and sanity check. Supports `bash scripts/fetch_target.sh` (all targets) or `bash scripts/fetch_target.sh langflow pygoat` (named targets). Current targets: Langflow, MLflow, PyGoat, bottle, PyYAML, Werkzeug. | Yes |
 | `rules/*.yaml` (13 files) | authored | The CodeGuard detection corpus: Python sinks + framework idioms. 9 authored up front (code/shell/SQL injection, SSRF, path traversal, unsafe deser, hardcoded secret, weak crypto, missing authz); **4 added by the flywheel** (IDOR, header-injection, error-leak, sensitive-data); the error-leak rule was later **sharpened** (CWE-209: 72 → 6). | Language-specific (Python); rules are reusable across Python targets |
 | `foundry_poc/indexer.py` | ⚠️ only if your target is **not** Python | The AST unit extractor - the single engine file tied to a language. Python targets need no change; another language means swapping this extractor. | Only for non-Python targets |
 
@@ -58,7 +62,10 @@ target:
   (`src/backend/base/langflow/api/v1/*.py`) plus the helper with the real `exec()`
   sink - 289 units, the external attack surface. `config-narrow.yaml` shows the
   opposite style: a hand-picked 12-module list, each entry annotated with one line of
-  reason. To sweep more, widen the glob, e.g. `src/backend/base/langflow/**/*.py`.
+  reason. `config-pygoat.yaml` takes a third approach: broad globs across all
+  application directories (`introduction/**/*.py`, `challenge/**/*.py`, etc.) to
+  cover a smaller, multi-app Django project. To sweep more, widen the glob, e.g.
+  `src/backend/base/langflow/**/*.py`.
 - `pinned_ref` makes the runs reproducible: everybody that runs it again sees the
   same code.
 

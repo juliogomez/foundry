@@ -1,0 +1,59 @@
+# Foundry PoC — PyYAML (small-repo candidate for Antares localization).
+#
+# PyYAML is a YAML parser/emitter (~442 KB Python source, ~848 KB total).
+# This repo falls in the 100 KB–500 KB tier of the Antares paper's Figure 6
+# (Section 8.3), where Antares achieves strong localization performance.
+#
+# Known vulnerability: CVE-2020-14343 (CWE-502, unsafe deserialization).
+# yaml.load() without an explicit safe Loader allows arbitrary Python object
+# instantiation from untrusted YAML input. The vulnerable code lives in
+# lib/yaml/__init__.py (the load/load_all functions).
+#
+# Purpose: demonstrate that Antares + Foundry localization works well on
+# appropriately-sized repos, in contrast to the large-repo results
+# (Langflow ~175 MB, MLflow ~112 MB) where Antares could not localize.
+
+system:
+  name: "foundry-poc-pyyaml"
+
+target:
+  path: "targets/pyyaml"
+  include_globs:
+    - "lib/yaml/*.py"
+  exclude_globs:
+    - "**/test*/**"
+    - "**/__pycache__/**"
+  pinned_ref: "5.3.1"
+
+goals: |
+  Evaluate the target for security defects: unsafe deserialization, code
+  injection via object instantiation, and sensitive-data exposure. In scope:
+  the yaml package (loader, constructor, resolver, parser, emitter, dumper).
+  Out of scope: tests, C extension bindings, examples.
+
+llm:
+  backend: "cursor"
+  model: "claude-sonnet-4-6"
+  scratch_cwd: ".scratch"
+
+batching:
+  detector_max_units: 25
+  detector_max_lines: 1200
+  triage_batch_size: 20
+
+budget:
+  max_tokens: 2000000
+  yield_window: 12
+  yield_min_true_positive_rate: 0.05
+
+severity:
+  scheme: "low_medium_high_critical"
+
+rules:
+  corpus_dir: "rules"
+
+store:
+  db_path: "out-pyyaml/findings.db"
+  provenance_log: "out-pyyaml/provenance.jsonl"
+  reports_dir: "out-pyyaml/findings"
+  rule_gaps_log: "out-pyyaml/rule-gaps.jsonl"

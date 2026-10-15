@@ -3,9 +3,9 @@
 **This repo is one worked reference implementation - a learning artifact, not a
 product, and not a replacement for the Foundry spec.** It exists to show *one* way
 the [Foundry spec](https://github.com/CiscoDevNet/foundry-security-spec) can be
-resolved for a concrete case (evaluate Langflow, using a Cursor-hosted model). When
-you go to your own code, the thing you carry over is the **learnings** this PoC
-demonstrates - not this specific engine.
+resolved for a concrete case (evaluate Langflow, MLflow, and PyGoat using a
+Cursor-hosted model). When you go to your own code, the thing you carry over is the
+**learnings** this PoC demonstrates - not this specific engine.
 
 So the destination is the **spec**, and this PoC is the teacher. Concretely, the
 learnings live in two docs you should reread with your own context in mind:
@@ -52,10 +52,12 @@ scanner and it is NOT how you run a real program.
 
 Two options:
 
-**A. Adapt the fetch script (reproducible, i recommend this one).**
-Copy `scripts/fetch_target.sh` and change `REPO_URL`, `PINNED_REF` and `DEST` to
-your repository and a commit/tag that you want to evaluate. To keep a fixed ref
-means that every run is reproducible.
+**A. Add to the fetch script (reproducible, i recommend this one).**
+Add an entry to the `TARGETS` array in `scripts/fetch_target.sh` with your
+repository URL, a pinned ref (tag or branch), and a sanity check pattern. Then
+run `bash scripts/fetch_target.sh your-target`. To keep a fixed ref means that
+every run is reproducible. See the existing entries (langflow, mlflow, pygoat,
+etc.) as examples of the format.
 
 **B. Point to a local checkout.**
 Set `target.path` in `config.yaml` to any local directory. (It does not need to be
@@ -143,7 +145,7 @@ rules, and run again. This is the flywheel of detection -> prevention working ov
   `true-positive` findings like *verified, worth to review*, and its `needs-review`
   items like leads, not like final verdicts.
 - **The trust properties travel.** The evidence gate, the fingerprint dedup, the
-  provenance and the bounded stop behave the same in your code and in Langflow,
-  and this is the point of putting the policy in the config and the discipline in
+  provenance and the bounded stop behave the same in your code as in the demo
+  targets (Langflow, MLflow, PyGoat), and this is the point of putting the policy in the config and the discipline in
   the harness - and the reason those properties are worth rebuilding from the spec
   in whatever implementation you ship.

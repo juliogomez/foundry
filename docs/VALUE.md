@@ -9,7 +9,7 @@ because the comparison was manipulated from the begining.
 
 Here we do the opposite on purpose. The comparison is:
 
-- **Same model** in the two sides (whatever you put in `config.yaml`).
+- **Same model** in the two sides.
 - **Same code** in the two sides (the same files in scope of a real and complex
   project).
 - The baseline receives a **fair and disciplined prompt** that asks explicitly for
@@ -30,9 +30,9 @@ The first three below are easy to conflate - they all involve "the gate" - but e
 answers a *different* question and maps to a different spec principle:
 
 - **Verifiable** *(is the evidence real?)* - about the **content** of one finding.
-  A `confirmed` finding's citations are mechanically resolved against the real
+  A "confirmed" finding's citations are mechanically resolved against the real
   source: the cited location exists and says what the finding claims. What cannot be
-  resolved is demoted to `needs-review`. This is Principle I, *Evidence Over
+  resolved is demoted to "needs-review". This is Principle I, *Evidence Over
   Assertion*.
 - **Tiered by force, not by hope** *(who set the label, and is my queue filtered?)* -
   about the **population you receive**, not any single citation. Only findings that
@@ -57,7 +57,7 @@ None of these are claims about *insight*. They are claims about the engineering
 discipline **around** the model, and this is exactly what a security program needs
 before it can trust automatic findings.
 
-## Foundry vs. just the baseline agent - the whole point
+## Foundry vs. just the baseline agent
 
 This is the question the PoC exists to answer, so read it slowly:
 
@@ -119,8 +119,7 @@ not yet cover. This is not a defeat for the harness - it is the input to its
 flywheel, which turns in **two** directions:
 
 **Adding rules (coverage grows).** Gaps come first from Foundry's **own exploratory
-pass** (FR-040/FR-042): in the wide run it recorded rule-gaps by itself for `CWE-346`
-(`Origin`/`X-Forwarded-For` trust in `get_client_ip` and `install_mcp_config`), with
+pass**: in the wide run it recorded rule-gaps by itself for `CWE-346`, with
 no second tool.
 We *additionally* use the baseline as an honest stand-in for "what unconstrained
 hunting might surface" (it flagged `CWE-348`, outside the corpus). Each gap becomes a
@@ -186,7 +185,7 @@ onto what this PoC actually did in the wide run:
 merging or omitting roles on a first build; we named these in
 [ARCHITECTURE.md](ARCHITECTURE.md):
 
-- **"validated if possible" / the `exploited` flag** (Principle VII, the Validator
+- **"validated if possible" / the "exploited" flag** (Principle VII, the Validator
   role). There is no live testbed here, so findings top out at
   `true-positive`/`needs-review` and nothing is ever marked `exploited`. This is the
   one clause of the value sentence a static PoC honestly cannot show.
@@ -198,7 +197,7 @@ merging or omitting roles on a first build; we named these in
 
 ## What we are NOT claiming
 
-- We do **not** claim that Foundry is a smarter bug-finder - it is the same model.
+- We do **not** claim that Foundry is a smarter bug-finder, it is the same model.
   Where it surfaces more (at full scope, ~2x the baseline's confirmed findings) that
   is exhaustive per-unit enumeration, not deeper insight; the raw **citation
   quality** ties. At small scope the counts look even and the baseline can even range
@@ -210,7 +209,10 @@ merging or omitting roles on a first build; we named these in
   impossible to prove without a perfect ground truth).
 - We do **not** use the known CVEs like a scoreboard. Langflow is chosen because it
   is a realistic, complex, first party Python code base. If its code has some real
-  weakness classes, this is just realism, it is not the point.
+  weakness classes, this is just realism, it is not the point. The additional
+  targets (MLflow for scale, PyGoat for the Antares integration) demonstrate
+  that these properties hold beyond one codebase, not that any specific CVE is
+  caught.
 
 The point is the **governance and repeatability gap**, measured with the metrics
 defined before in [METHODOLOGY.md](METHODOLOGY.md) and reported with honesty in

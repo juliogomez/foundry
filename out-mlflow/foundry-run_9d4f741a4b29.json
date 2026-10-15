@@ -1,0 +1,91 @@
+{
+  "run_id": "run_9d4f741a4b29",
+  "meta": {
+    "target": "mlflow",
+    "pinned_ref": "v2.9.0",
+    "model": "claude-sonnet-4-6",
+    "backend": "cursor",
+    "units_analyzed": 70,
+    "candidates": 2,
+    "total_tokens": 448867,
+    "max_tokens": 2000000,
+    "stop_reason": "coverage-complete (all 70 units); trailing true-positive yield=0.00"
+  },
+  "budget": {
+    "calls": 4,
+    "input_tokens": 223959,
+    "output_tokens": 961,
+    "total_tokens": 448867,
+    "max_tokens": 2000000,
+    "exhausted": false
+  },
+  "raw_candidate_count": 2,
+  "reported_findings": [
+    {
+      "file": "mlflow/_promptlab.py",
+      "line": 82,
+      "class": "CWE-22",
+      "severity": "high",
+      "verdict": "needs-review",
+      "fingerprint": "fp_20746c707bc3d406",
+      "symbol": "_load_pyfunc",
+      "title": "Potential path traversal via flavor config parameters_path",
+      "evidence": [
+        {
+          "file": "mlflow/_promptlab.py",
+          "line": 82,
+          "quote": "pyfunc_flavor_conf = _get_flavor_configuration(model_path=path, flavor_name=pyfunc.FLAVOR_NAME)",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/_promptlab.py",
+          "line": 83,
+          "quote": "parameters_path = os.path.join(path, pyfunc_flavor_conf[\"parameters_path\"])",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/_promptlab.py",
+          "line": 84,
+          "quote": "with open(parameters_path) as f:",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    },
+    {
+      "file": "mlflow/experiments.py",
+      "line": 129,
+      "class": "CWE-22",
+      "severity": "none",
+      "verdict": "false-positive",
+      "fingerprint": "fp_40529f00784ffa9d",
+      "symbol": "generate_csv_with_runs",
+      "title": "CLI filename argument write path is user-intentional",
+      "evidence": [
+        {
+          "file": "mlflow/experiments.py",
+          "line": 129,
+          "quote": "def generate_csv_with_runs(experiment_id, filename):",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/experiments.py",
+          "line": 135,
+          "quote": "if filename:",
+          "resolved": true,
+          "reason": "resolved"
+        },
+        {
+          "file": "mlflow/experiments.py",
+          "line": 136,
+          "quote": "runs.to_csv(filename, index=False)",
+          "resolved": true,
+          "reason": "resolved"
+        }
+      ]
+    }
+  ]
+}
