@@ -97,7 +97,7 @@ the six core-rule tasks.
 - **All tasks.** This column just adds up the other two, so it repeats the
   Foundry-learned result: 5, then 4, then 0 out of 24.
 
-These are the judge's raw verdicts. The [verdict audit](#verdict-audit) below
+These are the judge's raw veredicts. The [veredict audit](#verdict-audit) below
 re-reads them by hand. It moves the learned-rule arm to 0 or 1 of 24, depending on
 how strictly proxy trust is read.
 
@@ -126,9 +126,9 @@ What the agent wrote in those two tasks, without the learned rule:
   the direct peer was in a trusted proxy CIDR. The other used Werkzeug's
   `ProxyFix(x_for=1)`; see the audit.
 
-### Verdict audit
+### Veredict audit
 
-Every target-class verdict was read against the code. Three calls need a human
+Every target-class veredict was read against the code. Three calls need a human
 decision:
 
 1. **Rightmost `X-Forwarded-For` behind an ALB** (`ip-rate-limit`: one `none` trial
@@ -159,14 +159,20 @@ weakness.
 
 ### How strong is this?
 
-On the two tasks where unprotected agents failed, the unprotected arms combined were
-vulnerable in 8/8 trials (strict) or 6/8 (lenient). The learned-rule arm was
-vulnerable in 1/4 (strict) or 0/4 (lenient). One-sided Fisher exact tests give
-p = 0.02 and p = 0.03 respectively. Across all 72 trials the differences are in the
-same direction but not significant at this size (8/48 vs 1/24, p = 0.13 strict;
-6/48 vs 0/24, p = 0.08 lenient).
-That is expected, because most tasks never failed in any arm. With n = 2 per cell
-this is a well-controlled pilot, not a benchmark.
+Zoom in on just the two tasks where the unprotected agent actually failed
+(`ip-rate-limit`, `office-allowlist`). Without the learned rules, it got them wrong in
+every single trial: 8 of 8. With the learned rules, that fell to 1 of 4 (strict
+reading) or 0 of 4 (lenient). That gap is unlikely to be chance: a Fisher exact test
+puts the odds of seeing it by luck alone at 2% (strict) or 3% (lenient).
+
+Zoom back out to all 72 trials and the picture is weaker: 8 of 48 vs. 1 of 24
+(strict), or 6 of 48 vs. 0 of 24 (lenient). Same direction, but not strong enough to
+rule out chance (p = 0.13 and p = 0.08). That's expected: most of the 12 tasks never
+failed in *any* arm, so they add noise without adding evidence either way.
+
+Bottom line: with only 2 repetitions per cell, this is a well-controlled pilot, not a
+benchmark. The effect is real and large on the tasks it actually bites; it hasn't
+been shown to generalize beyond them yet.
 
 ### Cost
 
