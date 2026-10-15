@@ -31,26 +31,25 @@ def extract_json(text: str) -> Any:
     if text is None:
         raise LLMError("empty LLM response")
     t = text.strip()
-    # strip ```json ... ``` fences
-    fence = re.search(r"```(?:json)?\s*(.*?)```", t, re.DOTALL)
-    if fence:
-        t = fence.group(1).strip()
-    # find first balanced { } or [ ]
-    for opener, closer in (("{", "}"), ("[", "]")):
-        start = t.find(opener)
-        if start == -1:
-            continue
-        depth = 0
-        for i in range(start, len(t)):
-            if t[i] == opener:
-                depth += 1
-            elif t[i] == closer:
-                depth -= 1
-                if depth == 0:
-                    try:
-                        return json.loads(t[start : i + 1])
-                    except json.JSONDecodeError:
-                        break
+    # JSON string values may themselves contain ``` fences (e.g. markdown rule
+    # bodies), so try the whole-response fence before the first inner one.
+    candidates = []
+    outer = re.match(r"^```(?:json)?\s*(.*)```$", t, re.DOTALL)
+    if outer:
+        candidates.append(outer.group(1).strip())
+    inner = re.search(r"```(?:json)?\s*(.*?)```", t, re.DOTALL)
+    if inner:
+        candidates.append(inner.group(1).strip())
+    candidates.append(t)
+    decoder = json.JSONDecoder()
+    for c in candidates:
+        starts = sorted(i for i in (c.find("{"), c.find("[")) if i != -1)
+        for start in starts:
+            try:
+                obj, _ = decoder.raw_decode(c, start)
+                return obj
+            except json.JSONDecodeError:
+                continue
     raise LLMError(f"no parseable JSON in response: {text[:200]!r}")
 
 

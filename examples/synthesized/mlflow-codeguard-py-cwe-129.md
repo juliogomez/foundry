@@ -1,0 +1,292 @@
+description: Validate array bounds before indexing split/parsed sequences from user-controlled input
+globs: **/*.py,**/*.pyi
+version: 1.0.0
+---
+
+rule_id: codeguard-1-split-index-validation
+
+## Improper Validation of Array Index After String Splitting (CWE-129)
+
+Blindly indexing the result of `.split()`, `re.split()`, `urllib.parse`, or any other tokenisation of **caller-supplied** input without first verifying the resulting list length is long enough is a frequent source of two distinct security problems:
+
+1. **Denial of Service / Unhandled Exception** – A malformed input that produces fewer tokens than expected raises an `IndexError` that propagates as an unhandled exception, potentially crashing the process or leaking a stack trace to an attacker.
+2. **Trust-Boundary Bypass** – A crafted input that happens to contain enough tokens but with adversary-chosen content at a sensitive index produces an arbitrary value (e.g., `run_id`, `user_id`, `tenant_id`) that is then forwarded to privileged API calls, storage operations, or access-control checks, violating the intended isolation guarantees.
+
+This pattern appears most often when developers parse structured strings such as URIs, file paths, S3 keys, artifact paths, JWT components, or CSV records.
+
+---
+
+### Why This Is Dangerous
+
+```python
+# BAD – CWE-129: no bounds check before indexing position 3
+def _extract_run_id(self, artifact_path: str) -> str:
+    # artifact_path is expected to be  mlflow-artifacts://<host>/<run_id>/...
+    return artifact_path.split('/')[3]   # IndexError if < 4 segments
+                                          # arbitrary run_id if attacker controls segment 3
+```
+
+The root causes are:
+
+- **No length validation** before accessing a fixed index.
+- **No format/schema validation** of the raw string before splitting.
+- **Implicit trust** that the caller supplies a well-formed value matching an undocumented convention.
+- **Sensitive downstream use** of the extracted value (privilege escalation surface).
+
+---
+
+### Secure Coding Patterns
+
+#### Pattern 1 – Explicit Length Guard
+
+Always check `len(parts) > N` before accessing index `N`.
+
+```python
+# GOOD – explicit bounds check
+def _extract_run_id(self, artifact_path: str) -> str:
+    parts = artifact_path.split('/')
+    if len(parts) < 4:
+        raise ValueError(
+            f"Malformed artifact path – expected at least 4 segments, "
+            f"got {len(parts)}: {artifact_path!r}"
+        )
+    run_id = parts[3]
+    _validate_run_id(run_id)          # see Pattern 3
+    return run_id
+```
+
+#### Pattern 2 – Use `urllib.parse` for URI Parsing
+
+For URIs and URLs, prefer the standard library parser over manual splitting.  
+It gives you named attributes with clear semantics and raises `ValueError` on malformed input.
+
+```python
+import re
+from urllib.parse import urlparse
+
+# GOOD – structured URI parsing
+def _extract_run_id(self, artifact_uri: str) -> str:
+    parsed = urlparse(artifact_uri)
+    # path is e.g.  /<experiment_id>/<run_id>/artifacts/...
+    path_parts = [p for p in parsed.path.split('/') if p]  # strip empty
+    if len(path_parts) < 2:
+        raise ValueError(
+            f"Artifact URI path must contain at least experiment_id and run_id: "
+            f"{artifact_uri!r}"
+        )
+    run_id = path_parts[1]            # index 1 after stripping leading empty segment
+    _validate_run_id(run_id)
+    return run_id
+```
+
+#### Pattern 3 – Allowlist / Format Validation of Extracted Values
+
+After extraction, validate the token matches the expected format **before** using it in any privileged operation.  For identifiers such as run IDs, UUIDs, experiment IDs, or tenant IDs:
+
+```python
+import re
+
+_RUN_ID_RE = re.compile(r'^[0-9a-f]{32}$')       # MLflow run IDs are 32 hex chars
+
+def _validate_run_id(run_id: str) -> None:
+    """Raise ValueError if run_id does not match the expected format."""
+    if not _RUN_ID_RE.fullmatch(run_id):
+        raise ValueError(
+            f"Extracted run_id {run_id!r} does not match the expected format."
+        )
+```
+
+Use format validation appropriate for the domain:
+
+| Token type | Recommended validation |
+|---|---|
+| UUID / run_id | `re.fullmatch(r'^[0-9a-f-]{32,36}$', value)` |
+| Integer index | `value.isdigit()` or `int(value)` with try/except |
+| Filesystem path segment | `re.fullmatch(r'^[\w.-]{1,255}$', value)` |
+| AWS S3 key prefix | No `..`, no leading `/`, length < 1024 |
+| JWT component | base64url decode, then schema validate |
+
+#### Pattern 4 – Destructuring Unpack with Explicit Count
+
+Python's tuple unpacking is a readable alternative that raises `ValueError` automatically when the count does not match:
+
+```python
+# GOOD – tuple unpack enforces exact segment count
+def _extract_run_id(self, artifact_path: str) -> str:
+    try:
+        _scheme, _, _host, run_id, *_rest = artifact_path.split('/')
+    except ValueError as exc:
+        raise ValueError(
+            f"Malformed artifact path {artifact_path!r}: {exc}"
+        ) from exc
+    _validate_run_id(run_id)
+    return run_id
+```
+
+> **Note:** Use `*_rest` (not a fixed count) whenever the path may have additional optional segments.  
+> Catch `ValueError` – not `IndexError` – which is what Python raises on a failed unpack.
+
+#### Pattern 5 – Centralise Path Parsing in One Validated Function
+
+Avoid ad-hoc splits scattered across the codebase.  Centralise parsing so validation is applied consistently:
+
+```python
+from dataclasses import dataclass
+from urllib.parse import urlparse
+import re
+
+_RUN_ID_RE = re.compile(r'^[0-9a-f]{32}$')
+
+@dataclass(frozen=True)
+class ArtifactLocation:
+    scheme: str
+    host: str
+    run_id: str
+    artifact_subpath: str
+
+def parse_artifact_uri(uri: str) -> ArtifactLocation:
+    """Parse and validate an MLflow artifact URI.
+
+    Raises ValueError for any malformed or untrusted input.
+    """
+    parsed = urlparse(uri)
+    if parsed.scheme not in {"mlflow-artifacts", "dbfs"}:
+        raise ValueError(f"Unsupported URI scheme: {parsed.scheme!r}")
+
+    parts = [p for p in parsed.path.split('/') if p]
+    if len(parts) < 2:
+        raise ValueError(f"URI path must include experiment_id and run_id: {uri!r}")
+
+    run_id = parts[1]
+    if not _RUN_ID_RE.fullmatch(run_id):
+        raise ValueError(f"Invalid run_id segment {run_id!r} in URI {uri!r}")
+
+    artifact_subpath = '/'.join(parts[2:]) if len(parts) > 2 else ''
+    return ArtifactLocation(
+        scheme=parsed.scheme,
+        host=parsed.netloc,
+        run_id=run_id,
+        artifact_subpath=artifact_subpath,
+    )
+```
+
+Callers become trivial and safe:
+
+```python
+def _extract_run_id(self, artifact_path: str) -> str:
+    return parse_artifact_uri(artifact_path).run_id
+```
+
+---
+
+### Anti-Patterns to Avoid
+
+```python
+# NEVER do these:
+
+# 1. Direct index access after split – no bounds check
+run_id = path.split('/')[3]
+
+# 2. Silenced IndexError returning None / empty string
+try:
+    run_id = path.split('/')[3]
+except IndexError:
+    run_id = ''             # empty string is still used downstream!
+
+# 3. Defaulting to a magic fallback that bypasses access control
+parts = path.split('/')
+run_id = parts[3] if len(parts) > 3 else 'default'
+
+# 4. Splitting on variable delimiters without normalisation
+run_id = path.split(sep)[idx]   # sep and idx may themselves be attacker-controlled
+
+# 5. Using the raw token in a privileged call before validation
+response = api_client.get_run(run_id=path.split('/')[3])  # no validation
+```
+
+---
+
+### Framework-Specific Notes
+
+#### FastAPI / Flask path parameters
+Prefer route parameters over manual splitting; the framework validates the path structure.
+
+```python
+# GOOD – FastAPI route parameter, not manual split
+@app.get("/runs/{run_id}/artifacts/{artifact_path:path}")
+async def get_artifact(run_id: str, artifact_path: str):
+    _validate_run_id(run_id)          # still validate the format!
+    ...
+```
+
+#### AWS S3 / GCS / Azure Blob key parsing
+Use the SDK's native path helpers or `pathlib.PurePosixPath` rather than raw splits:
+
+```python
+from pathlib import PurePosixPath
+
+def extract_tenant_from_key(s3_key: str) -> str:
+    parts = PurePosixPath(s3_key).parts   # normalised, handles leading '/'
+    if len(parts) < 2:
+        raise ValueError(f"S3 key must include tenant prefix: {s3_key!r}")
+    tenant = parts[1]
+    if not re.fullmatch(r'[a-z0-9-]{3,63}', tenant):
+        raise ValueError(f"Invalid tenant segment: {tenant!r}")
+    return tenant
+```
+
+#### CSV / TSV records
+Use `csv.reader` or `pandas.read_csv` rather than `line.split(',')[N]`:
+
+```python
+import csv, io
+
+def parse_record_field(raw_line: str, column_index: int) -> str:
+    rows = list(csv.reader(io.StringIO(raw_line)))
+    if not rows or len(rows[0]) <= column_index:
+        raise ValueError(
+            f"Record has fewer than {column_index + 1} columns: {raw_line!r}"
+        )
+    return rows[0][column_index]
+```
+
+---
+
+### Testing Guidance
+
+For every function that parses a structured string, include negative tests:
+
+```python
+import pytest
+
+def test_extract_run_id_rejects_too_few_segments():
+    with pytest.raises(ValueError, match="Malformed"):
+        parse_artifact_uri("mlflow-artifacts://host/only-two")
+
+def test_extract_run_id_rejects_invalid_format():
+    with pytest.raises(ValueError, match="Invalid run_id"):
+        parse_artifact_uri("mlflow-artifacts://host/exp/../../etc/passwd")
+
+def test_extract_run_id_rejects_empty_string():
+    with pytest.raises(ValueError):
+        parse_artifact_uri("")
+
+def test_extract_run_id_happy_path():
+    loc = parse_artifact_uri("mlflow-artifacts://host/exp/" + "a" * 32 + "/model")
+    assert loc.run_id == "a" * 32
+```
+
+---
+
+### Implementation Checklist
+
+- [ ] **Bounds check first** – verify `len(parts) >= N + 1` before accessing `parts[N]` from any user-controlled split.
+- [ ] **Use structured parsers** – prefer `urllib.parse.urlparse`, `pathlib.PurePosixPath`, `csv.reader`, or SDK helpers over raw `.split()`.
+- [ ] **Validate token format** – after extraction, match the token against a strict allowlist regex before using it in any privileged operation.
+- [ ] **Reject, don't default** – raise a `ValueError` with a descriptive message; never silently replace a bad token with a default or empty string that is then used downstream.
+- [ ] **Centralise parsing** – put structured-string parsing in one validated function/method; never duplicate ad-hoc splits across the codebase.
+- [ ] **Propagate errors correctly** – let `ValueError` / `IndexError` bubble up or convert them to domain-specific exceptions; do not swallow them.
+- [ ] **Write negative unit tests** – cover at least: too-few segments, empty string, path traversal (`../`), and malformed identifier characters.
+- [ ] **Audit all `.split('/')[N]` usages** – search the codebase for `\.split\(.*\)\[\d+\]` and verify each has a length guard and format check.
+- [ ] **Consider input normalisation** – strip leading/trailing whitespace and collapse redundant delimiters before splitting, so the split result is predictable.
+- [ ] **Never use the raw token in a security decision without validation** – this includes database queries, file-system paths, API calls, and access-control checks.

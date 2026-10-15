@@ -1,0 +1,54 @@
+id: codeguard-py-cwe-346
+description: |
+  Detects functions that extract a client IP from proxy headers (X-Forwarded-For, X-Real-IP, CF-Connecting-IP) without first verifying that the direct TCP peer belongs to a known trusted proxy allowlist. When such an IP is subsequently used for access-control or locality decisions, a remote attacker can spoof loopback or private addresses to bypass security checks (CWE-346).
+
+  Provenance: auto-synthesized by `foundry synthesize` from rule-gap data.
+  Source CWE: CWE-346. See out/rule-gaps.jsonl for original detection context.
+languages: [python]
+severity: high
+weakness_class: CWE-346
+applies_to:
+  - Python HTTP handler functions (FastAPI, Flask, Django, aiohttp, Starlette)
+  - Middleware or utility functions named get_client_ip, get_real_ip, resolve_ip, client_ip, etc.
+  - Any code path that reads request.headers.get('X-Forwarded-For') or X-Real-IP
+  - Endpoint decorators that gate access based on a derived IP address
+trigger_when:
+  - A function reads X-Forwarded-For, X-Real-IP, or similar proxy headers
+  - The extracted IP value is used in an equality or membership check (e.g., ip == '127.0.0.1', ip in LOCAL_ADDRS)
+  - There is no prior validation that request.client.host (the direct TCP peer) belongs to a trusted proxy CIDR
+  - The leftmost value of X-Forwarded-For is used rather than the rightmost non-trusted value
+  - A locality or admin-only access check relies on the header-derived IP rather than the socket-level peer
+example_positive: |
+  def get_client_ip(request: Request) -> str:
+    forwarded_for = request.headers.get('X-Forwarded-For')
+    if forwarded_for:
+        return forwarded_for.split(',')[0].strip()  # attacker-controlled
+    return request.client.host
+
+  @app.get('/admin/install')
+  async def install_mcp_config(request: Request):
+    ip = get_client_ip(request)
+    if ip not in ('127.0.0.1', '::1'):
+        raise HTTPException(status_code=403)
+    # bypass: curl -H 'X-Forwarded-For: 127.0.0.1' http://victim/admin/install
+example_negative: |
+  import ipaddress
+  from fastapi import Request
+
+  TRUSTED_PROXY_CIDRS = [ipaddress.ip_network('10.0.0.0/8'), ipaddress.ip_network('127.0.0.0/8')]
+
+  def _is_trusted_proxy(ip_str: str) -> bool:
+    try:
+        addr = ipaddress.ip_address(ip_str)
+        return any(addr in cidr for cidr in TRUSTED_PROXY_CIDRS)
+    except ValueError:
+        return False
+
+  def require_local(request: Request) -> None:
+    # Use the direct TCP peer — not spoofable via headers
+    if request.client.host not in ('127.0.0.1', '::1'):
+        raise HTTPException(status_code=403, detail='Local only')
+
+  @app.get('/admin/install')
+  async def install_mcp_config(request: Request):
+    require_local(request)  # checks socket-level peer, ignores headers

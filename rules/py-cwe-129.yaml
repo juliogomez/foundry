@@ -1,0 +1,38 @@
+id: codeguard-py-cwe-129
+description: |
+  Detects Python code that blindly accesses a fixed index of a `.split()` result derived from caller-supplied input (URIs, paths, keys, records) without first validating the list length or the token format. Such patterns can cause unhandled `IndexError` crashes and, more critically, allow an attacker to inject arbitrary values into privileged downstream operations (e.g., API calls using an extracted `run_id`, `tenant_id`, or `user_id`). This corresponds to CWE-129: Improper Validation of Array Index.
+
+  Provenance: auto-synthesized by `foundry synthesize` from rule-gap data.
+  Source CWE: CWE-129. See out/rule-gaps.jsonl for original detection context.
+languages: [python]
+severity: high
+weakness_class: CWE-129
+applies_to:
+  - Python functions or methods that call `.split()` on a parameter, attribute, or return value of a network/IO/user-supplied string
+  - URI, URL, S3 key, artifact path, or file path parsers implemented with manual string splitting
+  - Any code path where the split result is indexed at a fixed position and the extracted token flows into a privileged API call, database query, filesystem operation, or access-control check
+  - Functions whose name or docstring indicates parsing of structured identifiers (run_id, tenant_id, user_id, experiment_id, key prefix)
+trigger_when:
+  - A `.split(delimiter)` call is made on a value originating from a function parameter, request object, configuration value, or external storage
+  - The result is indexed with a numeric literal (e.g., `[2]`, `[3]`) without a preceding `len()` guard or try/except block
+  - The extracted element is used directly (without format/allowlist validation) in a call to an external service, database, or security-sensitive function
+  - No unit test exists that passes a string with fewer segments than the assumed minimum
+example_positive: |
+  def _extract_run_id(self, artifact_path: str) -> str:
+    # artifact_path expected: mlflow-artifacts://<host>/<exp>/<run_id>/...
+    return artifact_path.split('/')[3]   # CWE-129: no bounds check, no format validation
+example_negative: |
+  import re
+  from urllib.parse import urlparse
+
+  _RUN_ID_RE = re.compile(r'^[0-9a-f]{32}$')
+
+  def _extract_run_id(self, artifact_path: str) -> str:
+    parsed = urlparse(artifact_path)
+    parts = [p for p in parsed.path.split('/') if p]
+    if len(parts) < 2:
+        raise ValueError(f"Malformed artifact URI – expected experiment_id and run_id: {artifact_path!r}")
+    run_id = parts[1]
+    if not _RUN_ID_RE.fullmatch(run_id):
+        raise ValueError(f"Extracted run_id {run_id!r} does not match expected format")
+    return run_id

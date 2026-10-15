@@ -20,3 +20,6 @@ out-werkzeug/
 
 # OS noise
 .DS_Store
+
+# Blog drafts and images (published elsewhere)
+blog/

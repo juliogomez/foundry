@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import re
+import textwrap
 import time
 from pathlib import Path
 from typing import Any
@@ -138,6 +139,12 @@ def _slug_from_cwe(cwe: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", cwe.lower()).strip("-")
 
 
+def _block(text: str) -> str:
+    """Indent continuation lines so multi-line text stays inside a `|` YAML block."""
+    lines = textwrap.dedent(str(text)).strip("\n").splitlines()
+    return "\n".join(lines[:1] + [f"  {ln}" if ln.strip() else "" for ln in lines[1:]])
+
+
 def _parse_synthesis_response(text: str) -> dict[str, Any]:
     """Extract the JSON object from the LLM synthesis response."""
     from .llm import extract_json
@@ -211,14 +218,14 @@ def synthesize_rule(
 
     foundry_content = FOUNDRY_RULE_TEMPLATE.format(
         rule_id=f"codeguard-py-{slug}",
-        description=parsed["foundry_description"],
+        description=_block(parsed["foundry_description"]),
         cwe=cwe,
         language="python",
         severity=parsed.get("foundry_severity", "high"),
         applies_to=applies_to_yaml,
         trigger_when=trigger_when_yaml,
-        example_positive=parsed.get("foundry_example_positive", "# example"),
-        example_negative=parsed.get("foundry_example_negative", "# secure example"),
+        example_positive=_block(parsed.get("foundry_example_positive", "# example")),
+        example_negative=_block(parsed.get("foundry_example_negative", "# secure example")),
     )
 
     return {

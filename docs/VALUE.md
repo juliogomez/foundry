@@ -124,7 +124,9 @@ no second tool.
 We *additionally* use the baseline as an honest stand-in for "what unconstrained
 hunting might surface" (it flagged `CWE-348`, outside the corpus). Each gap becomes a
 new CodeGuard rule; the four rules the loop added earlier (IDOR, info-leak,
-header-injection, sensitive-data) are already **live** in the current 13-rule corpus.
+header-injection, sensitive-data) are already **live** in the 13-rule corpus the
+reported runs used. Synthesizing the CWE-346 and CWE-129 gaps has since grown it to
+15 (see [CODEGUARD.md](CODEGUARD.md#real-synthesis-runs)).
 
 **Sharpening rules (signal grows).** A rule that fires too much is also a flywheel
 signal. In the wide run the `CWE-209` rule matched a pervasive `HTTPException(detail=

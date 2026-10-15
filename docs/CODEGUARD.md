@@ -189,3 +189,30 @@ The CWE-346 gap that Foundry surfaced *once* is now:
 - Active across every developer's IDE in the organization (portable markdown)
 
 One observation, permanent protection. That is the flywheel.
+
+## Real synthesis runs
+
+The synthesizer was run against both confirmed gaps from the real evaluations:
+
+```bash
+python -m foundry_poc.cli synthesize --cwe CWE-346                            # Langflow gap
+python -m foundry_poc.cli --config config-mlflow.yaml synthesize --cwe CWE-129  # MLflow gap
+```
+
+| Gap | Source | Tokens | Time | CodeGuard rule | Foundry rule |
+|---|---|---|---|---|---|
+| CWE-346 (proxy-header trust) | Langflow `get_client_ip` | ~28K | ~82s | [examples/synthesized/langflow-codeguard-py-cwe-346.md](../examples/synthesized/langflow-codeguard-py-cwe-346.md) | [rules/py-cwe-346.yaml](../rules/py-cwe-346.yaml) |
+| CWE-129 (unchecked split index) | MLflow `_extract_run_id` | ~29K | ~93s | [examples/synthesized/mlflow-codeguard-py-cwe-129.md](../examples/synthesized/mlflow-codeguard-py-cwe-129.md) | [rules/py-cwe-129.yaml](../rules/py-cwe-129.yaml) |
+
+Each synthesis costs roughly 1-2% of the evaluation that discovered the gap (the
+Langflow sweep was ~2M tokens). The Foundry corpus grew from 13 to 15 rules; the
+runs reported in [RESULTS.md](RESULTS.md) predate this and used the 13-rule corpus.
+
+The CodeGuard rules land in the target's `.cursor/rules/` by default (not committed
+here because `targets/` is fetched, not vendored), so copies live in
+`examples/synthesized/`.
+
+**Human review is required.** As generated, the CWE-346 rule cited two CVE IDs as
+examples of the pattern; at least one (CVE-2023-45857, an axios token leak) does not
+match it. The citation was replaced with the confirmed Langflow finding before
+committing. Treat every synthesized rule as a pull request, not a deployment.
